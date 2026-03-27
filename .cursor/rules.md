@@ -1,0 +1,13 @@
+- Prefer explicit multi-line if statements
+- Avoid one-line conditionals
+- Optimize for readability over brevity
+- Use clear, descriptive variable and function names
+- Add comments only when necessary to explain intent, not mechanics
+- Write code like a staff engineer reviewing junior code
+
+- Favor simple, maintainable solutions over clever ones
+- Keep functions small and focused on a single responsibility
+- Avoid unnecessary abstraction; introduce it only when it reduces complexity
+- When modifying code, preserve existing patterns unless there is a clear improvement
+- When adding logic, consider edge cases and include basic validation
+- Before writing code, briefly explain the approach and tradeoffs when non-trivial
