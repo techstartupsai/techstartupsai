@@ -1,9 +1,12 @@
-// Public layout — wraps all public-facing pages (landing, pricing, blog, startup profiles).
-// Header and Footer are added in TASK-008.
-export default function PublicLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <>{children}</>;
+import { Header } from "@/components/Header"
+import { Footer } from "@/components/Footer"
+
+export default function PublicLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">{children}</main>
+      <Footer />
+    </div>
+  )
 }

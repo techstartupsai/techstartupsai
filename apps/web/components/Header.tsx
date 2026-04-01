@@ -1,0 +1,31 @@
+"use client"
+
+import { useTheme } from "next-themes"
+import { Moon, Sun } from "lucide-react"
+import { Button } from "@techstartups/ui"
+
+export function Header() {
+  const { theme, setTheme } = useTheme()
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-border bg-background">
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500 text-sm font-bold text-white">
+            TS
+          </div>
+          <span className="text-sm font-semibold">TechStartups.ai</span>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          aria-label="Toggle theme"
+        >
+          <Sun className="dark:hidden" />
+          <Moon className="hidden dark:block" />
+        </Button>
+      </div>
+    </header>
+  )
+}
