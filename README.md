@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TechStartups AI
 
-## Getting Started
+Startup intelligence platform for job seekers, founders, and investors.
 
-First, run the development server:
+## Stack
+
+- **Next.js 14 App Router** — `apps/web`
+- **Supabase** — Postgres, Auth, RLS
+- **Stripe** — subscriptions
+- **Turborepo + pnpm workspaces** — monorepo
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Copy `apps/web/.env.example` → `apps/web/.env.local` and fill in values.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Database migration workflow
 
-## Learn More
+All schema changes are version-controlled as SQL files in `supabase/migrations/`.
 
-To learn more about Next.js, take a look at the following resources:
+### One-time setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Install Supabase CLI:
+   ```bash
+   brew install supabase/tap/supabase
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Log in to Supabase:
+   ```bash
+   supabase login
+   ```
 
-## Deploy on Vercel
+3. Set your project ref in your shell (or add to root `.env.local`):
+   ```bash
+   export SUPABASE_PROJECT_REF=xucigljidauhxskrglds
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Link this repo to the hosted project:
+   ```bash
+   pnpm db:link
+   ```
+   You will be prompted for the database password — find it in the Supabase dashboard under **Settings → Database**.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Adding a new table
+
+1. Create a new migration file with a UTC timestamp prefix:
+   ```
+   supabase/migrations/YYYYMMDDHHMMSS_describe_change.sql
+   ```
+
+2. Write the SQL (table definition + RLS policies).
+
+3. Push to prod:
+   ```bash
+   pnpm db:push
+   ```
+
+### Scripts
+
+| Script | What it does |
+|--------|--------------|
+| `pnpm db:link` | Links repo to hosted Supabase project (run once per machine) |
+| `pnpm db:push` | Applies all pending migrations to prod |
+| `pnpm db:reset` | Resets the local Supabase instance and re-applies all migrations |

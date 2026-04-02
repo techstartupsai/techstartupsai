@@ -55,43 +55,35 @@ export async function POST(request: Request) {
       subject: "You're on the TechStartups AI waitlist",
       html: `
         <div style="background:#f4f3ef;padding:0;margin:0;font-family:sans-serif;">
-          <div style="max-width:560px;margin:0 auto;">
+          <div style="max-width:560px;margin:0 auto;padding:48px;">
 
-            <div style="background:#0f1117;padding:36px 48px 32px;">
-              <div style="display:flex;align-items:center;gap:10px;">
-                <div style="width:32px;height:32px;background:linear-gradient(135deg,#3b82f6,#6366f1);border-radius:8px;display:inline-block;text-align:center;line-height:32px;font-size:16px;">🚀</div>
-                <span style="font-size:15px;font-weight:500;color:#fff;">Tech<span style="color:#6366f1;">Startups</span>.ai</span>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:36px;">
+              <div style="width:32px;height:32px;background:linear-gradient(135deg,#3b82f6,#6366f1);border-radius:8px;display:inline-block;text-align:center;line-height:32px;font-size:16px;">🚀</div>
+              <span style="font-size:15px;font-weight:500;color:#0f1117;">Tech<span style="color:#6366f1;">Startups</span>.ai</span>
+            </div>
+
+            <div style="display:inline-block;background:#e8f0fe;color:#3b5bdb;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;margin-bottom:24px;">Early Access</div>
+            <h1 style="font-size:28px;font-weight:400;color:#0f1117;line-height:1.3;margin:0 0 20px;font-family:Georgia,serif;">You're on the list.</h1>
+            <p style="font-size:15px;color:#4a5063;line-height:1.7;margin:0 0 16px;">Thanks for joining the TechStartups.ai early access waitlist. We're building an intelligence layer for the startup ecosystem — and you'll be among the first in.</p>
+
+            <hr style="border:none;border-top:1px solid #e0ded8;margin:32px 0;" />
+
+            <div style="margin-bottom:36px;">
+              <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;">
+                <div style="width:6px;height:6px;min-width:6px;background:#6366f1;border-radius:50%;margin-top:8px;"></div>
+                <p style="font-size:14px;color:#3a3f52;line-height:1.6;margin:0;">Early access to AI-powered startup profiles and momentum scores</p>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;">
+                <div style="width:6px;height:6px;min-width:6px;background:#6366f1;border-radius:50%;margin-top:8px;"></div>
+                <p style="font-size:14px;color:#3a3f52;line-height:1.6;margin:0;">Founding member pricing when we launch paid tiers</p>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:14px;">
+                <div style="width:6px;height:6px;min-width:6px;background:#6366f1;border-radius:50%;margin-top:8px;"></div>
+                <p style="font-size:14px;color:#3a3f52;line-height:1.6;margin:0;">We'll notify you the moment the doors open</p>
               </div>
             </div>
 
-            <div style="padding:48px;">
-              <div style="display:inline-block;background:#e8f0fe;color:#3b5bdb;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;margin-bottom:24px;">Early Access</div>
-              <h1 style="font-size:28px;font-weight:400;color:#0f1117;line-height:1.3;margin:0 0 20px;font-family:Georgia,serif;">You're on the list.</h1>
-              <p style="font-size:15px;color:#4a5063;line-height:1.7;margin:0 0 16px;">Thanks for joining the TechStartups.ai early access waitlist. We're building an intelligence layer for the startup ecosystem — and you'll be among the first in.</p>
-
-              <hr style="border:none;border-top:1px solid #e0ded8;margin:32px 0;" />
-
-              <div style="margin-bottom:32px;">
-                <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">
-                  <div style="width:6px;height:6px;min-width:6px;background:#6366f1;border-radius:50%;margin-top:8px;"></div>
-                  <p style="font-size:14px;color:#3a3f52;line-height:1.5;margin:0;">Early access to AI-powered startup profiles and momentum scores</p>
-                </div>
-                <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;">
-                  <div style="width:6px;height:6px;min-width:6px;background:#6366f1;border-radius:50%;margin-top:8px;"></div>
-                  <p style="font-size:14px;color:#3a3f52;line-height:1.5;margin:0;">Founding member pricing when we launch paid tiers</p>
-                </div>
-                <div style="display:flex;align-items:flex-start;gap:12px;">
-                  <div style="width:6px;height:6px;min-width:6px;background:#6366f1;border-radius:50%;margin-top:8px;"></div>
-                  <p style="font-size:14px;color:#3a3f52;line-height:1.5;margin:0;">We'll notify you the moment the doors open</p>
-                </div>
-              </div>
-
-              <p style="font-size:13px;color:#888;margin:0;">Sent from <a href="mailto:hello@techstartups.ai" style="color:#6366f1;text-decoration:none;">hello@techstartups.ai</a> · You're receiving this because you signed up at techstartups.ai</p>
-            </div>
-
-            <div style="background:#0f1117;padding:28px 48px;">
-              <p style="font-size:12px;color:rgba(255,255,255,0.35);margin:0;line-height:1.6;">© 2026 TechStartups.ai · San Mateo, CA</p>
-            </div>
+            <p style="font-size:12px;color:#aaa;margin:0;padding-top:24px;border-top:1px solid #e0ded8;">Sent from <a href="mailto:hello@techstartups.ai" style="color:#6366f1;text-decoration:none;">hello@techstartups.ai</a> · You're receiving this because you signed up at techstartups.ai · <a href="#" style="color:#6366f1;text-decoration:none;">Unsubscribe</a></p>
 
           </div>
         </div>
