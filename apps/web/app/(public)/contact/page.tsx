@@ -3,7 +3,7 @@ export default function ContactPage() {
     <div className="mx-auto max-w-3xl px-4 py-16">
       <h1 className="mb-2 text-3xl font-bold tracking-tight">Contact</h1>
       <p className="mb-12 text-muted-foreground">
-        We&apos;d love to hear from you — founders, investors, job seekers, or press.
+        {"We'd love to hear from you — founders, investors, job seekers, or press."}
       </p>
 
       <div className="flex flex-col gap-8">

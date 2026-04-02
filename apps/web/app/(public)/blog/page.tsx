@@ -12,7 +12,7 @@ export default function BlogPage() {
         <p className="text-2xl">✍️</p>
         <p className="font-medium text-foreground">Posts coming soon</p>
         <p className="max-w-xs text-sm text-muted-foreground">
-          We&apos;re working on our first posts.
+          {"We're working on our first posts."}
           <br />
           Check back at soon...
         </p>

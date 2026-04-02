@@ -16,9 +16,9 @@ export default function PrivacyPage() {
         <section>
           <h2 className="mb-3 text-base font-semibold text-foreground">1. Introduction</h2>
           <p>
-            TechStartups.ai (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) operates the
-            startup intelligence platform at techstartups.ai. This Privacy Policy explains how we
-            collect, use, disclose, and protect your personal information when you use our platform.
+            TechStartups.ai ("we," "our," or "us") operates the startup intelligence platform at
+            techstartups.ai. This Privacy Policy explains how we collect, use, disclose, and protect
+            your personal information when you use our platform.
           </p>
           <p className="mt-3">
             By creating an account or accessing TechStartups.ai, you agree to this Privacy Policy.
@@ -192,7 +192,7 @@ export default function PrivacyPage() {
           <ul className="mb-3 flex list-disc flex-col gap-1 pl-5">
             <li>Access the personal data we hold about you</li>
             <li>Correct inaccurate or incomplete data</li>
-            <li>Request deletion of your data (&ldquo;right to be forgotten&rdquo;)</li>
+            <li>Request deletion of your data ("right to be forgotten")</li>
             <li>Restrict or object to certain processing activities</li>
             <li>Data portability (receive your data in a structured, machine-readable format)</li>
             <li>Withdraw consent where processing is based on consent</li>
@@ -212,7 +212,7 @@ export default function PrivacyPage() {
 
         <section>
           <h2 className="mb-3 text-base font-semibold text-foreground">
-            9. Children&apos;s Privacy
+            {"9. Children's Privacy"}
           </h2>
           <p>
             TechStartups.ai is not intended for users under 18 years of age. We do not knowingly

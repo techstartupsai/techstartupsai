@@ -192,3 +192,10 @@ Format:
 - After Cursor review, Claude Code applies the requested changes
 - All refactors are logged in the Refactor Log above before session end
 - Mark tasks ✅ Done in Notion after completion
+
+## JSX Text Encoding
+
+Never use HTML entities (&apos;, &quot;, &amp;) for apostrophes or quotes in JSX text content.
+Instead, wrap the string in a JS expression:
+✅ {"We're working on our first posts."}
+❌ We&apos;re working on our first posts.

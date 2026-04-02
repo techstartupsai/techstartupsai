@@ -11,3 +11,10 @@
 - When modifying code, preserve existing patterns unless there is a clear improvement
 - When adding logic, consider edge cases and include basic validation
 - Before writing code, briefly explain the approach and tradeoffs when non-trivial
+
+## JSX Text Encoding
+
+Never use HTML entities (&apos;, &quot;, &amp;) for apostrophes or quotes in JSX text content.
+Instead, wrap the string in a JS expression:
+✅ {"We're working on our first posts."}
+❌ We&apos;re working on our first posts.

@@ -16,10 +16,10 @@ export default function TermsPage() {
         <section>
           <h2 className="mb-3 text-base font-semibold text-foreground">1. Acceptance of Terms</h2>
           <p>
-            By accessing or using TechStartups.ai (the &ldquo;Platform&rdquo;), you agree to be
-            bound by these Terms of Service (&ldquo;Terms&rdquo;). If you do not agree, you may not
-            use the Platform. These Terms form a binding contract between you and TechStartups.ai
-            (&ldquo;Company,&rdquo; &ldquo;we,&rdquo; or &ldquo;us&rdquo;).
+            By accessing or using TechStartups.ai (the "Platform"), you agree to be bound by these
+            Terms of Service ("Terms"). If you do not agree, you may not use the Platform. These
+            Terms form a binding contract between you and TechStartups.ai ("Company," "we," or
+            "us").
           </p>
         </section>
 
@@ -72,7 +72,7 @@ export default function TermsPage() {
           <p>
             Cancellation takes effect at the end of your current billing period — no partial-period
             refunds are issued, except as required by applicable law. We reserve the right to change
-            pricing with at least 30 days&apos; written notice. If you disagree with a price change,
+            pricing with at least {"30 days'"} written notice. If you disagree with a price change,
             you may cancel before the change takes effect.
           </p>
         </section>
@@ -127,11 +127,11 @@ export default function TermsPage() {
         <section>
           <h2 className="mb-3 text-base font-semibold text-foreground">8. Disclaimers</h2>
           <p>
-            The Platform is provided &ldquo;as is&rdquo; and &ldquo;as available&rdquo; without
-            warranties of any kind, express or implied. We do not warrant that the Platform will be
-            uninterrupted or error-free. Startup and funding data is aggregated from public records
-            and user submissions and may contain inaccuracies. TechStartups.ai is not responsible
-            for decisions made based on Platform content.
+            The Platform is provided "as is" and "as available" without warranties of any kind,
+            express or implied. We do not warrant that the Platform will be uninterrupted or
+            error-free. Startup and funding data is aggregated from public records and user
+            submissions and may contain inaccuracies. TechStartups.ai is not responsible for
+            decisions made based on Platform content.
           </p>
         </section>
 
@@ -165,7 +165,7 @@ export default function TermsPage() {
           <h2 className="mb-3 text-base font-semibold text-foreground">11. Changes to Terms</h2>
           <p>
             We may update these Terms from time to time. For material changes, we will provide at
-            least 30 days&apos; notice via email or prominent in-app notification. Continued use
+            least {"30 days'"} notice via email or prominent in-app notification. Continued use
             after the effective date constitutes acceptance of the revised Terms.
           </p>
         </section>
