@@ -203,7 +203,7 @@ export default function HomePage() {
 
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
           Startup Intelligence,
-          <span className="block text-primary">before it's obvious.</span>
+          <span className="block text-primary">before it&apos;s obvious.</span>
         </h1>
 
         <p className="max-w-2xl text-lg text-muted-foreground transition-all duration-300">
@@ -247,7 +247,7 @@ export default function HomePage() {
             </form>
           ) : (
             <p className="font-medium text-foreground">
-              You're on the list — we'll be in touch soon.
+              {"You're on the list — we'll be in touch soon."}
             </p>
           )}
           {errorMessage && <p className="text-sm text-destructive">{errorMessage}</p>}

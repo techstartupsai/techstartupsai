@@ -1,4 +1,19 @@
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { cn } from '@/lib/utils'
+
+const FOOTER_LINKS = [
+  { label: 'Privacy', href: '/privacy' },
+  { label: 'Terms', href: '/terms' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Contact', href: '/contact' },
+]
+
 export function Footer() {
+  const pathname = usePathname()
+
   return (
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 py-8 text-sm text-muted-foreground sm:flex-row sm:justify-between">
@@ -6,21 +21,18 @@ export function Footer() {
           TechStartups<span className="text-primary">.ai</span>
         </span>
         <nav className="flex items-center gap-4">
-          <a href="/" className="transition-colors hover:text-foreground">
-            Privacy
-          </a>
-          <a href="/" className="transition-colors hover:text-foreground">
-            Terms
-          </a>
-          <a href="/" className="transition-colors hover:text-foreground">
-            Blog
-          </a>
-          <a
-            href="mailto:hello@techstartups.ai"
-            className="transition-colors hover:text-foreground"
-          >
-            Contact
-          </a>
+          {FOOTER_LINKS.map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              className={cn(
+                'transition-colors hover:text-foreground',
+                pathname === href && 'font-medium text-foreground'
+              )}
+            >
+              {label}
+            </Link>
+          ))}
         </nav>
         <p>© 2026 TechStartups AI</p>
       </div>
