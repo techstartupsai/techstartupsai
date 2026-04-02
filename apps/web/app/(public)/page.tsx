@@ -106,6 +106,7 @@ export default function HomePage() {
   const [email, setEmail] = useState("")
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   function onUserClick(type: UserType) {
     const next = userType === type ? null : type
@@ -121,6 +122,7 @@ export default function HomePage() {
       return
     }
     setIsLoading(true)
+    setErrorMessage(null)
     try {
       const response = await fetch("/api/waitlist", {
         method: "POST",
@@ -129,9 +131,12 @@ export default function HomePage() {
       })
       if (response.ok) {
         setIsSubmitted(true)
+      } else {
+        const data = await response.json() as { error?: string }
+        setErrorMessage(data.error ?? "Something went wrong. Please try again.")
       }
     } catch {
-      // TODO: show error toast
+      setErrorMessage("Something went wrong. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -194,6 +199,9 @@ export default function HomePage() {
             <p className="font-medium text-foreground">
               You're on the list — we'll be in touch soon.
             </p>
+          )}
+          {errorMessage && (
+            <p className="text-sm text-destructive">{errorMessage}</p>
           )}
           <p className="text-xs text-muted-foreground">
             14-day free trial at launch · No credit card needed to join the waitlist
