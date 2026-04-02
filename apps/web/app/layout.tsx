@@ -1,19 +1,39 @@
 import './globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Geist } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import { cn } from '@/lib/utils'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 
-export const metadata: Metadata = {
-  title: 'TechStartups.ai — AI-Powered Startup Intelligence',
-  description:
-    "AI-powered momentum scoring for startups — before they're obvious. For founders building momentum, investors hunting deals, and job seekers finding the next breakout company.",
+export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
     { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
   ],
+}
+
+export const metadata: Metadata = {
+  title: 'TechStartups.ai — AI-Powered Startup Intelligence',
+  description:
+    "AI-powered momentum scoring for startups — before they're obvious. For founders building momentum, investors hunting deals, and job seekers finding the next breakout company.",
+  openGraph: {
+    title: 'TechStartups.ai — AI-Powered Startup Intelligence',
+    description:
+      "AI-powered momentum scoring for startups — before they're obvious. For founders building momentum, investors hunting deals, and job seekers finding the next breakout company. 🦄",
+    url: 'https://techstartups.ai',
+    siteName: 'TechStartups.ai',
+    type: 'website',
+    images: [{ url: '/opengraph-image.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@techstartupsai',
+    title: 'TechStartups.ai — AI-Powered Startup Intelligence',
+    description:
+      "AI-powered momentum scoring for startups — before they're obvious. For founders building momentum, investors hunting deals, and job seekers finding the next breakout company. 🦄",
+    images: ['/opengraph-image.png'],
+  },
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -23,10 +43,6 @@ export const metadata: Metadata = {
     apple: { url: '/apple-touch-icon.png', sizes: '180x180' },
   },
   manifest: '/site.webmanifest',
-  twitter: {
-    card: 'summary_large_image',
-    site: '@techstartupsai',
-  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
