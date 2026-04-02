@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Check } from 'lucide-react'
 import { Button, Input } from '@techstartups/ui'
 import { cn } from '@/lib/utils'
@@ -17,7 +17,7 @@ interface Plan {
 interface UserTier {
   id: UserType
   label: string
-  icon: string
+  icon: ReactNode
   tag: string
   description: string
   plans: Plan[]
@@ -70,7 +70,7 @@ const USER_TIERS: UserTier[] = [
   {
     id: 'founder',
     label: 'Founder',
-    icon: '🚀',
+    icon: <span className="inline-block -scale-x-100">🦄</span>,
     tag: 'Raise smarter, get discovered',
     description:
       'Raise smarter. Track competitors, get discovered by investors, close your round with AI-powered tools.',
