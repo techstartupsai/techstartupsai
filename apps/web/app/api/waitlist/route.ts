@@ -74,7 +74,7 @@ export async function POST(request: Request) {
               <p style="font-size:14px;color:#3a3f52;line-height:1.6;margin:0;"><span style="display:inline-block;width:6px;height:6px;background:#6366f1;border-radius:50%;vertical-align:middle;margin-right:10px;"></span>We'll notify you the moment the doors open</p>
             </div>
 
-            <p style="font-size:12px;color:#aaa;margin:0;padding-top:24px;border-top:1px solid #e0ded8;">Sent from <a href="mailto:hello@techstartups.ai" style="color:#6366f1;text-decoration:none;">hello@techstartups.ai</a> · You're receiving this because you signed up at techstartups.ai · <a href="#" style="color:#6366f1;text-decoration:none;">Unsubscribe</a></p>
+            <p style="font-size:12px;color:#aaa;margin:0;padding-top:24px;border-top:1px solid #e0ded8;">Sent from <a href="mailto:hello@techstartups.ai" style="color:#6366f1;text-decoration:none;">hello@techstartups.ai</a> · You're receiving this because you signed up at techstartups.ai · <a href="https://techstartups.ai/api/unsubscribe?email=${encodeURIComponent(email)}" style="color:#6366f1;text-decoration:none;">Unsubscribe</a></p>
 
           </div>
         </div>
