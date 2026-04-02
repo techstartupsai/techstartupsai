@@ -192,7 +192,7 @@ export default function HomePage() {
                 className="flex-1"
               />
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Joining…" : "Join free"}
+                {isLoading ? "Joining…" : "Join waitlist"}
               </Button>
             </form>
           ) : (
