@@ -1,3 +1,11 @@
+import type { Metadata } from 'next'
+
+// static metadata injected into <head> by Next.js at build time
+export const metadata: Metadata = {
+  title: 'Blog — TechStartups.ai',
+  description: 'Startup intelligence insights, product updates, and founder stories.',
+}
+
 export default function BlogPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">

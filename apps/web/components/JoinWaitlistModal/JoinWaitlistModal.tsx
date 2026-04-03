@@ -16,6 +16,7 @@ export function JoinWaitlistModal() {
   const [isSuccess, setIsSuccess] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
+  // reset the form when the modal is closed
   useEffect(() => {
     if (!isOpen) {
       setEmail('')
@@ -26,6 +27,7 @@ export function JoinWaitlistModal() {
     }
   }, [isOpen])
 
+  // close the modal on escape key press
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -36,11 +38,12 @@ export function JoinWaitlistModal() {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [close])
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onJoinWaitlist(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsSubmitting(true)
     setErrorMessage('')
 
+    // submit the waitlist form
     try {
       const response = await fetch('/api/waitlist', {
         method: 'POST',
@@ -48,8 +51,8 @@ export function JoinWaitlistModal() {
         body: JSON.stringify({ email, user_type: role || null }),
       })
 
+      // handle the response
       const data = (await response.json()) as WaitlistErrorResponse
-
       if (!response.ok) {
         setErrorMessage(data.error ?? 'Something went wrong. Please try again.')
       } else {
@@ -101,7 +104,7 @@ export function JoinWaitlistModal() {
             {"You're on the list! Check your inbox for a confirmation email."}
           </p>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form onSubmit={onJoinWaitlist} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="modal-email" className="text-sm text-muted-foreground">
                 Email

@@ -6,29 +6,29 @@ import { z } from 'zod'
 const POSTGRES_UNIQUE_VIOLATION = '23505'
 
 const waitlistSchema = z.object({
-  email: z.string().email('Invalid email address'),
+  email: z.email('Invalid email address'),
   user_type: z.string().nullable().optional(),
 })
 
 export async function POST(request: Request) {
+  // parse the request body
   const body: unknown = await request.json()
   const result = waitlistSchema.safeParse(body)
-
   if (!result.success) {
     return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
   }
 
+  // create a new waitlist entry
   const { email, user_type } = result.data
-
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SECRET_KEY!
   )
-
   const { error: insertError } = await supabase.from('waitlist').insert({ email })
 
+  // handle errors
   if (insertError) {
-    // Postgres unique violation
+    // handle Postgres unique violation
     if (insertError.code === POSTGRES_UNIQUE_VIOLATION) {
       return NextResponse.json({ error: 'Already on the waitlist' }, { status: 409 })
     }
@@ -39,8 +39,10 @@ export async function POST(request: Request) {
     )
   }
 
+  // send the waitlist confirmation and notification emails
   const resend = new Resend(process.env.RESEND_API_KEY)
   await Promise.all([
+    // send the waitlist confirmation email to the user
     resend.emails.send({
       from: 'TechStartups AI <hello@techstartups.ai>',
       to: email,
@@ -72,6 +74,8 @@ export async function POST(request: Request) {
         </div>
       `,
     }),
+
+    // send a notification email to the admin
     resend.emails.send({
       from: 'TechStartups AI <hello@techstartups.ai>',
       to: 'evan@techstartups.ai',

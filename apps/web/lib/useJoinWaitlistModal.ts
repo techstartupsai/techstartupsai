@@ -6,9 +6,7 @@ interface JoinWaitlistModalStore {
   close: () => void
 }
 
-/**
- * Global state and hooks to show and hide the Join Waitlist modal
- */
+// global state and hook to show and hide the Join Waitlist modal
 export const useJoinWaitlistModal = create<JoinWaitlistModalStore>((set) => ({
   isOpen: false,
   open: () => set({ isOpen: true }),

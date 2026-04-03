@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+// static metadata injected into <head> by Next.js at build time
 export const metadata: Metadata = {
   title: 'About — TechStartups.ai',
   description:

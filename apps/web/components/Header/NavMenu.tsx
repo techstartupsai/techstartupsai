@@ -20,26 +20,28 @@ export function NavMenu() {
   const pathname = usePathname()
   const menuRef = useRef<HTMLDivElement>(null)
 
+  // close the menu on escape key press
   useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
+    function onPageKeyPress(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         setIsMenuOpen(false)
       }
     }
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
+    document.addEventListener('keydown', onPageKeyPress)
+    return () => document.removeEventListener('keydown', onPageKeyPress)
   }, [])
 
+  // close the menu on click outside
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function onPageClick(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false)
       }
     }
     if (isMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener('mousedown', onPageClick)
     }
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', onPageClick)
   }, [isMenuOpen])
 
   return (

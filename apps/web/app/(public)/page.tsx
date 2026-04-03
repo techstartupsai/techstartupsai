@@ -157,7 +157,8 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  function onUserClick(event: React.MouseEvent, type: UserType) {
+  // handles user type click
+  function onClickUserType(event: React.MouseEvent, type: UserType) {
     event.stopPropagation()
     const next = userType === type ? null : type
     setUserType(next)
@@ -168,13 +169,16 @@ export default function HomePage() {
     }
   }
 
-  async function handleSubmit(event: React.FormEvent) {
+  // handles waitlist form submit
+  async function onJoinWaitlist(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!email || isLoading) {
       return
     }
     setIsLoading(true)
     setErrorMessage(null)
+
+    // submit waitlist form
     try {
       const response = await fetch('/api/waitlist', {
         method: 'POST',
@@ -196,7 +200,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col" onClick={() => setUserType(null)}>
-      {/* ── Hero ─────────────────────────────────────────────────────── */}
+      {/* Hero section */}
       <section className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 py-14 text-center">
         <span className="rounded-full border border-primary/30 bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
           Early access
@@ -204,7 +208,7 @@ export default function HomePage() {
 
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
           Startup Intelligence,
-          <span className="block text-primary">before it&apos;s obvious.</span>
+          <span className="block text-primary">{"before it's obvious."}</span>
         </h1>
 
         <p className="max-w-2xl text-lg text-muted-foreground transition-all duration-300">
@@ -216,7 +220,7 @@ export default function HomePage() {
           {USER_TIERS.map(({ id, icon, label }) => (
             <button
               key={id}
-              onClick={(event) => onUserClick(event, id)}
+              onClick={(event) => onClickUserType(event, id)}
               className={cn(
                 'cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-all',
                 userType === id
@@ -232,7 +236,7 @@ export default function HomePage() {
         {/* Waitlist form */}
         <div id="waitlist" className="flex w-full max-w-md flex-col items-center gap-3">
           {!isSubmitted ? (
-            <form onSubmit={handleSubmit} className="flex w-full gap-2">
+            <form onSubmit={onJoinWaitlist} className="flex w-full gap-2">
               <Input
                 id="waitlist-email"
                 type="email"
@@ -258,13 +262,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── User type cards ─────────────────────────────────────────── */}
+      {/* User type cards */}
       <section>
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 px-4 py-10 sm:grid-cols-3">
           {USER_TIERS.map(({ id, icon, label, description }) => (
             <div
               key={id}
-              onClick={(event) => onUserClick(event, id)}
+              onClick={(event) => onClickUserType(event, id)}
               className={cn(
                 'cursor-pointer rounded-xl border border-border bg-card p-6 text-card-foreground transition-opacity duration-300',
                 userType && userType !== id ? 'opacity-40' : 'opacity-100'
@@ -280,7 +284,7 @@ export default function HomePage() {
 
       <hr className="border-border" />
 
-      {/* ── Pricing plans ──────────────────────────────────────────────────── */}
+      {/* Pricing plans */}
       <section id="pricing" className="mx-auto w-full max-w-6xl px-4 py-16">
         <div className="mb-8 text-center">
           <h2 className="mb-2 text-3xl font-bold tracking-tight">Simple, transparent pricing</h2>

@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { z } from 'zod'
 
-const emailSchema = z.string().email()
+const emailSchema = z.email()
 
 const UNSUBSCRIBED_HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -48,20 +48,19 @@ const INVALID_HTML = `<!DOCTYPE html>
 const HTML_HEADERS = { 'Content-Type': 'text/html' }
 
 export async function GET(request: NextRequest) {
+  // parse the email from query params
   const emailParam = request.nextUrl.searchParams.get('email')
   const parseResult = emailSchema.safeParse(emailParam)
-
   if (!parseResult.success) {
     return new Response(INVALID_HTML, { status: 400, headers: HTML_HEADERS })
   }
-
   const email = parseResult.data
 
+  // update the waitlist entry with the unsubscribed_at timestamp
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SECRET_KEY!
   )
-
   await supabase
     .from('waitlist')
     .update({ unsubscribed_at: new Date().toISOString() })

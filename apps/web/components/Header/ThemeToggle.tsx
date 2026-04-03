@@ -10,13 +10,13 @@ interface ThemeToggleProps {
 export function ThemeToggle({ showLabel = false }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme()
 
-  function toggle() {
+  function onThemeClick() {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
   }
 
   return (
     <button
-      onClick={toggle}
+      onClick={onThemeClick}
       aria-label="Toggle theme"
       className="flex cursor-pointer items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
     >
