@@ -84,7 +84,7 @@ export function NavMenu() {
             Get Started
           </button>
           <div className="px-3 py-2">
-            <ThemeToggle showLabel />
+            <ThemeToggle showLabel onThemeToggle={() => setIsMenuOpen(false)} />
           </div>
         </nav>
       </div>
