@@ -129,11 +129,9 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-size: 60%;
+  background-size: max(60%, 75vw);
   background-position: top left;
   background-repeat: no-repeat;
-  -webkit-mask-image: radial-gradient(ellipse 75% 65% at top left, black 0%, transparent 100%);
-  mask-image: radial-gradient(ellipse 75% 65% at top left, black 0%, transparent 100%);
   z-index: -1;
   pointer-events: none;
 }
