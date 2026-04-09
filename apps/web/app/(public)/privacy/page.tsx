@@ -2,7 +2,7 @@ export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
       <h1 className="mb-2 text-3xl font-bold tracking-tight">Privacy Policy</h1>
-      <p className="mb-12 text-sm text-muted-foreground">
+      <p className="mb-12 text-sm">
         Effective date: January 1, 2026 · Last updated: April 2, 2026 · Contact:{' '}
         <a
           href="mailto:hello@techstartups.ai"
@@ -12,7 +12,7 @@ export default function PrivacyPage() {
         </a>
       </p>
 
-      <div className="flex flex-col gap-10 text-sm leading-relaxed text-muted-foreground">
+      <div className="flex flex-col gap-10 text-sm leading-relaxed">
         <section>
           <h2 className="mb-3 text-base font-semibold text-foreground">1. Introduction</h2>
           <p>
