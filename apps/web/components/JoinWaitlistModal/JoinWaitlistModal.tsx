@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
 import { cn } from '@/lib/utils'
 import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
+import { type UserType, type WaitlistApiResponse } from '@/lib/schemas'
 import {
   Combobox,
   ComboboxChips,
@@ -17,17 +18,13 @@ import {
   useComboboxAnchor,
 } from '@/components/ui/combobox'
 
-type UserTypeValue = 'job_seeker' | 'founder' | 'investor'
-
-type WaitlistErrorResponse = { error?: string }
-
-const USER_TYPE_OPTIONS: { value: UserTypeValue; label: string }[] = [
+const USER_TYPE_OPTIONS: { value: UserType; label: string }[] = [
   { value: 'job_seeker', label: 'Job Seeker' },
   { value: 'founder', label: 'Founder' },
   { value: 'investor', label: 'Investor' },
 ]
 
-const USER_TYPE_LABELS: Record<UserTypeValue, string> = {
+const USER_TYPE_LABELS: Record<UserType, string> = {
   job_seeker: 'Job Seeker',
   founder: 'Founder',
   investor: 'Investor',
@@ -38,7 +35,7 @@ const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 export function JoinWaitlistModal() {
   const { isOpen: isWaitlistModalOpen, close: closeWaitlistModal } = useJoinWaitlistModal()
   const [email, setEmail] = useState('')
-  const [selectedTypes, setSelectedTypes] = useState<UserTypeValue[]>([])
+  const [selectedTypes, setSelectedTypes] = useState<UserType[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -68,7 +65,7 @@ export function JoinWaitlistModal() {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [closeWaitlistModal])
 
-  async function onJoinWaitlist(event: React.FormEvent<HTMLFormElement>) {
+  async function handleJoinWaitlist(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsSubmitting(true)
     setErrorMessage('')
@@ -89,9 +86,9 @@ export function JoinWaitlistModal() {
       })
 
       // handle the response
-      const data = (await response.json()) as WaitlistErrorResponse
+      const data = (await response.json()) as WaitlistApiResponse
       if (!response.ok) {
-        setErrorMessage(data.error ?? 'Something went wrong. Please try again.')
+        setErrorMessage('error' in data ? data.error : 'Something went wrong. Please try again.')
       } else {
         setIsSuccess(true)
       }
@@ -142,7 +139,7 @@ export function JoinWaitlistModal() {
             {"You're on the list! Check your inbox for a confirmation email."}
           </p>
         ) : (
-          <form onSubmit={onJoinWaitlist} className="flex flex-col gap-4">
+          <form onSubmit={handleJoinWaitlist} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="modal-email" className="text-sm text-muted-foreground">
                 Email
@@ -159,11 +156,11 @@ export function JoinWaitlistModal() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm text-muted-foreground">{"I'm a... (optional)"}</label>
+              <label className="text-sm text-muted-foreground">{'I am a...'}</label>
               <Combobox multiple value={selectedTypes} onValueChange={setSelectedTypes}>
                 <ComboboxChips ref={rolesRef}>
                   <ComboboxValue>
-                    {(values: UserTypeValue[]) =>
+                    {(values: UserType[]) =>
                       values.map((value) => (
                         <ComboboxChip key={value}>{USER_TYPE_LABELS[value]}</ComboboxChip>
                       ))

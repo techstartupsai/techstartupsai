@@ -5,13 +5,13 @@ import { Sun, Moon } from 'lucide-react'
 
 interface ThemeToggleProps {
   showLabel?: boolean
-  onThemeToggle?: (theme: string) => void
+  onThemeToggle?: (theme: 'light' | 'dark') => void
 }
 
 export function ThemeToggle({ showLabel = false, onThemeToggle }: ThemeToggleProps) {
   const { resolvedTheme, setTheme } = useTheme()
 
-  function onThemeClick() {
+  function handleThemeClick() {
     const theme = resolvedTheme === 'dark' ? 'light' : 'dark'
     setTheme(theme)
     onThemeToggle?.(theme)
@@ -19,7 +19,7 @@ export function ThemeToggle({ showLabel = false, onThemeToggle }: ThemeTogglePro
 
   return (
     <button
-      onClick={onThemeClick}
+      onClick={handleThemeClick}
       aria-label="Toggle theme"
       className="flex cursor-pointer items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
     >

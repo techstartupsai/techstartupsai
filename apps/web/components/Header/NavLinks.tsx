@@ -5,12 +5,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
 import { ThemeToggle } from './ThemeToggle'
-
-const NAV_ITEMS = [
-  { label: 'Home', href: '/' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'About', href: '/about' },
-]
+import { NAV_ITEMS } from './nav-items'
 
 export function NavLinks() {
   const pathname = usePathname()

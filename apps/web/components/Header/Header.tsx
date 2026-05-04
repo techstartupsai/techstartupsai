@@ -11,12 +11,12 @@ export function Header() {
 
   // toggle blur once the user scrolls past the top of the page
   useEffect(() => {
-    function onPageScroll() {
+    function handlePageScroll() {
       setIsScrolled(window.scrollY > 0)
     }
-    onPageScroll()
-    window.addEventListener('scroll', onPageScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onPageScroll)
+    handlePageScroll()
+    window.addEventListener('scroll', handlePageScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handlePageScroll)
   }, [])
 
   return (

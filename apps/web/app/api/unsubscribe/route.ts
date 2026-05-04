@@ -2,9 +2,7 @@ import { NextRequest } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import * as Sentry from '@sentry/nextjs'
 import { redirect } from 'next/navigation'
-import { z } from 'zod'
-
-const emailSchema = z.email()
+import { emailSchema } from '@/lib/schemas'
 
 export async function GET(request: NextRequest) {
   // parse the email from query params

@@ -7,12 +7,7 @@ import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
 import { ThemeToggle } from './ThemeToggle'
-
-const NAV_ITEMS = [
-  { label: 'Home', href: '/' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'About', href: '/about' },
-]
+import { NAV_ITEMS } from './nav-items'
 
 export function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -22,26 +17,26 @@ export function NavMenu() {
 
   // close the menu on escape key press
   useEffect(() => {
-    function onPageKeyPress(event: KeyboardEvent) {
+    function handlePageKeyPress(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         setIsMenuOpen(false)
       }
     }
-    document.addEventListener('keydown', onPageKeyPress)
-    return () => document.removeEventListener('keydown', onPageKeyPress)
+    document.addEventListener('keydown', handlePageKeyPress)
+    return () => document.removeEventListener('keydown', handlePageKeyPress)
   }, [])
 
   // close the menu on click outside
   useEffect(() => {
-    function onPageClick(event: MouseEvent) {
+    function handlePageClick(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false)
       }
     }
     if (isMenuOpen) {
-      document.addEventListener('mousedown', onPageClick)
+      document.addEventListener('mousedown', handlePageClick)
     }
-    return () => document.removeEventListener('mousedown', onPageClick)
+    return () => document.removeEventListener('mousedown', handlePageClick)
   }, [isMenuOpen])
 
   return (

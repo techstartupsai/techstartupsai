@@ -1,8 +1,10 @@
 import { Body, Container, Head, Html, Preview, Text } from 'react-email'
 
+type UserType = 'job_seeker' | 'founder' | 'investor'
+
 interface AdminSignupNotificationProps {
   email: string
-  userTypes?: string[]
+  userTypes?: UserType[]
 }
 
 // notification email sent to admin when a new user joins the waitlist

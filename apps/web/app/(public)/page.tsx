@@ -6,8 +6,7 @@ import { Button } from '@techstartups/ui'
 import { cn } from '@/lib/utils'
 import { GetEarlyAccessButton } from '@/components/GetEarlyAccessButton'
 import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
-
-type UserType = 'jobSeeker' | 'founder' | 'investor'
+import { type UserType } from '@/lib/schemas'
 
 interface Plan {
   name: string
@@ -27,7 +26,7 @@ interface UserTier {
 
 const USER_TIERS: UserTier[] = [
   {
-    id: 'jobSeeker',
+    id: 'job_seeker',
     label: 'Job seeker',
     icon: '🎯',
     tag: 'Find stable, growing companies',
@@ -157,7 +156,7 @@ export default function HomePage() {
   const { open: openWaitlistModal } = useJoinWaitlistModal()
 
   // handles user type click — toggles the type on or off
-  function onClickUserType(event: React.MouseEvent, type: UserType) {
+  function handleClickUserType(event: React.MouseEvent, type: UserType) {
     event.stopPropagation()
     const isSelected = selectedUserTypes.includes(type)
     if (isSelected) {
@@ -188,7 +187,7 @@ export default function HomePage() {
           {USER_TIERS.map(({ id, icon, label }) => (
             <button
               key={id}
-              onClick={(event) => onClickUserType(event, id)}
+              onClick={(event) => handleClickUserType(event, id)}
               className={cn(
                 'cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-all',
                 selectedUserTypes.includes(id)
@@ -216,7 +215,7 @@ export default function HomePage() {
           {USER_TIERS.map(({ id, icon, label, description }) => (
             <div
               key={id}
-              onClick={(event) => onClickUserType(event, id)}
+              onClick={(event) => handleClickUserType(event, id)}
               className={cn(
                 'cursor-pointer rounded-xl border border-border bg-card p-6 text-card-foreground transition-opacity duration-300',
                 selectedUserTypes.length > 0 && !selectedUserTypes.includes(id)

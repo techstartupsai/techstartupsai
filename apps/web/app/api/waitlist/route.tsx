@@ -3,25 +3,17 @@ import { createClient } from '@supabase/supabase-js'
 import * as Sentry from '@sentry/nextjs'
 import { Resend } from 'resend'
 import { render } from 'react-email'
-import { z } from 'zod'
 import WaitlistConfirmation from '@techstartups/emails/WaitlistConfirmation'
 import AdminSignupNotification from '@techstartups/emails/AdminSignupNotification'
 import { verifyTurnstileToken } from '@/lib/turnstile'
+import { waitlistRequestSchema } from '@/lib/schemas'
 
 const POSTGRES_UNIQUE_VIOLATION = '23505'
-
-const userTypeEnum = z.enum(['job_seeker', 'founder', 'investor'])
-
-const waitlistSchema = z.object({
-  email: z.email('Invalid email address'),
-  userTypes: z.array(userTypeEnum).min(1).max(3).optional(),
-  turnstileToken: z.string().optional(),
-})
 
 export async function POST(request: Request) {
   // parse the request body
   const body: unknown = await request.json()
-  const result = waitlistSchema.safeParse(body)
+  const result = waitlistRequestSchema.safeParse(body)
   if (!result.success) {
     return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
   }

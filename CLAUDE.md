@@ -124,7 +124,8 @@ if (!result.success) {
 }
 ```
 
-- **Event handler functions use the `on` prefix**: `onClickUserType`, `onJoinWaitlist`, `onThemeClick`, `onPageKeyPress`
+- **Event handler functions use the `handle` prefix**: `handleClickUserType`, `handleJoinWaitlist`, `handleThemeClick`, `handlePageKeyPress`
+- **Event handler props use the `on` prefix**: `onThemeToggle`, `onClick`, `onSubmit` — the `on` prefix is reserved for props only, never for local handler functions
 
 ## Brace style
 
@@ -193,21 +194,15 @@ Format:
 ### [DATE] [File or module affected]
 
 - **What changed:** Brief description
-
 - **Why:** Reason (e.g. simplify, performance, convention alignment)
-
 - **Impact:** Any downstream files or patterns affected
 
 ## Workflow
 
 - Tasks come from Notion Sprint / Tasks page
-
 - Claude Code (Warp) implements; Cursor is used for review and inline edits
-
 - After Cursor review, Claude Code applies the requested changes
-
 - All refactors are logged in the Refactor Log above before session end
-
 - Mark tasks ✅ Done in Notion after completion
 
 ## Refactor Log
@@ -233,7 +228,7 @@ Format:
 
 ## JSX Text Encoding
 
-Never use HTML entities (&apos;, &quot;, &amp;) for apostrophes or quotes in JSX text content.
+Never use HTML entities (', ", &) for apostrophes or quotes in JSX text content.
 Instead, wrap the string in a JS expression:
 ✅ {"We're working on our first posts."}
-❌ We&apos;re working on our first posts.
+❌ We're working on our first posts.
