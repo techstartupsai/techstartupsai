@@ -56,7 +56,7 @@ export function NavMenu() {
         )}
       >
         <div className="overflow-hidden">
-          <div className="border-b border-border bg-background/95 shadow-xl backdrop-blur-md">
+          <div className="border-b border-border bg-background shadow-xl">
             <nav className="flex flex-col px-4 py-3">
               {NAV_ITEMS.map((item) => (
                 <Link
@@ -64,7 +64,7 @@ export function NavMenu() {
                   href={item.href}
                   onClick={() => setIsMenuOpen(false)}
                   className={cn(
-                    'border-b border-border/50 py-3.5 text-base transition-colors last:border-none hover:text-foreground',
+                    'block w-full border-b border-border/50 py-3.5 text-base transition-colors last:border-none hover:text-foreground',
                     pathname === item.href
                       ? 'font-semibold text-foreground'
                       : 'text-muted-foreground'
@@ -78,13 +78,15 @@ export function NavMenu() {
                   setIsMenuOpen(false)
                   openWaitlistModal()
                 }}
-                className="cursor-pointer border-b border-border/50 py-3.5 text-left text-base text-blue-400 transition-colors hover:text-blue-300"
+                className="w-full cursor-pointer border-b border-border/50 py-3.5 text-left text-base text-blue-400 transition-colors hover:text-blue-300"
               >
                 Get Started
               </button>
-              <div className="py-3">
-                <ThemeToggle showLabel onThemeToggle={() => setIsMenuOpen(false)} />
-              </div>
+              <ThemeToggle
+                showLabel
+                className="w-full py-3.5"
+                onThemeToggle={() => setIsMenuOpen(false)}
+              />
             </nav>
           </div>
         </div>
