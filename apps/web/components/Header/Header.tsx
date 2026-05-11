@@ -29,7 +29,7 @@ export function Header() {
       )}
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <Link href="/" className="text-sm font-semibold text-foreground">
+        <Link href="/" className="text-base font-semibold text-foreground">
           <span className="text-2xl">🚀</span> TechStartups<span className="text-primary">.ai</span>
         </Link>
         <NavLinks />

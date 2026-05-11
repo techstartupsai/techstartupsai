@@ -86,21 +86,21 @@
 [data-theme='dark'] {
   --background: oklch(0.18 0.035 257);
   --foreground: oklch(0.93 0.008 257);
-  --card: oklch(0.22 0.035 257);
+  --card: oklch(0.27 0.035 257);
   --card-foreground: oklch(0.93 0.008 257);
-  --popover: oklch(0.22 0.035 257);
+  --popover: oklch(0.27 0.035 257);
   --popover-foreground: oklch(0.93 0.008 257);
   --primary: oklch(0.62 0.23 254);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.26 0.032 257);
   --secondary-foreground: oklch(0.93 0.008 257);
   --muted: oklch(0.26 0.032 257);
-  --muted-foreground: oklch(0.58 0.014 257);
+  --muted-foreground: oklch(0.65 0.014 257);
   --accent: oklch(0.26 0.032 257);
   --accent-foreground: oklch(0.93 0.008 257);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  --border: oklch(1 0 0 / 14%);
+  --input: oklch(1 0 0 / 18%);
   --ring: oklch(0.62 0.23 254);
   --chart-1: oklch(0.62 0.23 254);
   --chart-2: oklch(0.72 0.15 254);
@@ -138,7 +138,7 @@ body {
 
 [data-theme='dark'] body::before {
   background-image: url('/images/bg-dark.png');
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 [data-theme='light'] body::before {
@@ -147,6 +147,9 @@ body {
 }
 
 @layer base {
+  html {
+    font-size: 17px;
+  }
   * {
     @apply border-border outline-ring/50;
   }

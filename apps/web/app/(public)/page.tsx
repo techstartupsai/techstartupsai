@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { Check } from 'lucide-react'
 import { Button } from '@techstartups/ui'
 import { cn } from '@/lib/utils'
@@ -152,83 +152,24 @@ const USER_TIERS: UserTier[] = [
 ]
 
 export default function HomePage() {
-  const [selectedUserTypes, setSelectedUserTypes] = useState<UserType[]>([])
   const { open: openWaitlistModal } = useJoinWaitlistModal()
 
-  // handles user type click — toggles the type on or off
-  function handleClickUserType(event: React.MouseEvent, type: UserType) {
-    event.stopPropagation()
-    const isSelected = selectedUserTypes.includes(type)
-    if (isSelected) {
-      setSelectedUserTypes(selectedUserTypes.filter((userType) => userType !== type))
-    } else {
-      setSelectedUserTypes([...selectedUserTypes, type])
-      document
-        .getElementById(`pricing-${type}`)
-        ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-  }
-
   return (
-    <div className="flex flex-col" onClick={() => setSelectedUserTypes([])}>
+    <div className="flex flex-col">
       {/* Hero section */}
       <section className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 py-14 text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-          Startup Intelligence,
-          <span className="block text-primary">{"before it's obvious."}</span>
+          Startup Tracking,
+          <span className="block text-primary">powered by AI</span>
         </h1>
 
         <p className="max-w-2xl text-lg transition-all duration-300">
-          Real momentum signals for job seekers, founders, and investors — powered by AI.
+          Continuous intelligence for job seekers, founders, and investors.
         </p>
-
-        {/* User type pills */}
-        <div className="flex flex-wrap justify-center gap-2">
-          {USER_TIERS.map(({ id, icon, label }) => (
-            <button
-              key={id}
-              onClick={(event) => handleClickUserType(event, id)}
-              className={cn(
-                'cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-all',
-                selectedUserTypes.includes(id)
-                  ? 'border-transparent bg-primary text-primary-foreground'
-                  : 'border-border bg-card text-foreground hover:bg-muted'
-              )}
-            >
-              {icon} {label}
-            </button>
-          ))}
-        </div>
 
         {/* Waitlist CTA */}
         <div className="flex w-full max-w-md flex-col items-center gap-3">
           <GetEarlyAccessButton />
-          <p className="text-xs">
-            14-day free trial at launch · No credit card needed to join the waitlist
-          </p>
-        </div>
-      </section>
-
-      {/* User type cards */}
-      <section>
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 px-4 py-10 sm:grid-cols-3">
-          {USER_TIERS.map(({ id, icon, label, description }) => (
-            <div
-              key={id}
-              onClick={(event) => handleClickUserType(event, id)}
-              className={cn(
-                'cursor-pointer rounded-xl border border-border bg-card p-6 text-card-foreground transition-opacity duration-300',
-                selectedUserTypes.length > 0 && !selectedUserTypes.includes(id)
-                  ? 'opacity-40'
-                  : 'opacity-100'
-              )}
-            >
-              <h3 className="mb-2 flex items-center gap-2 font-semibold">
-                <span className="text-2xl">{icon}</span> {label}
-              </h3>
-              <p className="text-sm text-muted-foreground">{description}</p>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -251,16 +192,7 @@ export default function HomePage() {
 
         <div className="flex flex-col gap-10">
           {USER_TIERS.map(({ id, icon, label, tag, plans }) => (
-            <div
-              key={id}
-              id={`pricing-${id}`}
-              className={cn(
-                'flex scroll-mt-20 flex-col gap-4 transition-opacity duration-300',
-                selectedUserTypes.length > 0 && !selectedUserTypes.includes(id)
-                  ? 'opacity-40'
-                  : 'opacity-100'
-              )}
-            >
+            <div key={id} id={`pricing-${id}`} className="flex scroll-mt-20 flex-col gap-4">
               <div className="flex items-center gap-3">
                 <h3 className="font-semibold">
                   {icon} {label}

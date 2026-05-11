@@ -20,7 +20,7 @@ export function NavLinks() {
             key={item.href}
             href={item.href}
             className={cn(
-              'text-sm transition-colors',
+              'text-base transition-colors',
               isActive
                 ? 'font-semibold text-foreground'
                 : 'text-muted-foreground hover:text-foreground'
@@ -32,7 +32,7 @@ export function NavLinks() {
       })}
       <button
         onClick={openWaitlistModal}
-        className="text-sm text-blue-400 transition-colors hover:text-blue-300"
+        className="text-base text-blue-400 transition-colors hover:text-blue-300"
       >
         Get Started
       </button>

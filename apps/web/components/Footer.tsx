@@ -71,7 +71,7 @@ export function Footer() {
 
         {/* footer links */}
         <div className="flex flex-col items-center gap-4 text-sm text-muted-foreground sm:flex-row sm:justify-between">
-          <Link href="/" className="font-semibold text-foreground">
+          <Link href="/" className="text-base font-semibold text-foreground">
             TechStartups<span className="text-primary">.ai</span>
           </Link>
           <nav className="flex items-center gap-4">

@@ -51,37 +51,43 @@ export function NavMenu() {
 
       <div
         className={cn(
-          'absolute top-full right-0 mt-2 w-44 overflow-hidden rounded-lg border border-border bg-background/95 shadow-lg backdrop-blur-md transition-all duration-200',
-          isMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+          'fixed top-14 right-0 left-0 grid w-full transition-[grid-template-rows] duration-300 ease-out',
+          isMenuOpen ? 'grid-rows-[1fr]' : 'pointer-events-none grid-rows-[0fr]'
         )}
       >
-        <nav className="flex flex-col gap-1 p-2">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setIsMenuOpen(false)}
-              className={cn(
-                'rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-foreground',
-                pathname === item.href ? 'font-semibold text-foreground' : 'text-muted-foreground'
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <button
-            onClick={() => {
-              setIsMenuOpen(false)
-              openWaitlistModal()
-            }}
-            className="cursor-pointer rounded-md px-3 py-2 text-left text-sm text-blue-400 transition-colors hover:bg-accent hover:text-blue-300"
-          >
-            Get Started
-          </button>
-          <div className="px-3 py-2">
-            <ThemeToggle showLabel onThemeToggle={() => setIsMenuOpen(false)} />
+        <div className="overflow-hidden">
+          <div className="border-b border-border bg-background/95 shadow-xl backdrop-blur-md">
+            <nav className="flex flex-col px-4 py-3">
+              {NAV_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={cn(
+                    'border-b border-border/50 py-3.5 text-base transition-colors last:border-none hover:text-foreground',
+                    pathname === item.href
+                      ? 'font-semibold text-foreground'
+                      : 'text-muted-foreground'
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false)
+                  openWaitlistModal()
+                }}
+                className="cursor-pointer border-b border-border/50 py-3.5 text-left text-base text-blue-400 transition-colors hover:text-blue-300"
+              >
+                Get Started
+              </button>
+              <div className="py-3">
+                <ThemeToggle showLabel onThemeToggle={() => setIsMenuOpen(false)} />
+              </div>
+            </nav>
           </div>
-        </nav>
+        </div>
       </div>
     </div>
   )
