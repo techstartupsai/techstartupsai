@@ -8,6 +8,7 @@ import { NavMenu } from './NavMenu'
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   // toggle blur once the user scrolls past the top of the page
   useEffect(() => {
@@ -23,7 +24,7 @@ export function Header() {
     <header
       className={cn(
         'relative sticky top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-200',
-        isScrolled
+        isScrolled || isMenuOpen
           ? 'border-b border-border/40 bg-background/60 backdrop-blur-xl backdrop-saturate-150'
           : 'border-b border-transparent bg-transparent'
       )}
@@ -33,7 +34,7 @@ export function Header() {
           <span className="text-2xl">🚀</span> TechStartups<span className="text-primary">.ai</span>
         </Link>
         <NavLinks />
-        <NavMenu />
+        <NavMenu isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} />
       </div>
     </header>
   )

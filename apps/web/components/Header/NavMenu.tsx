@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
@@ -9,8 +9,12 @@ import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
 import { ThemeToggle } from './ThemeToggle'
 import { NAV_ITEMS } from './nav-items'
 
-export function NavMenu() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+interface NavMenuProps {
+  isMenuOpen: boolean
+  onMenuOpenChange: (isOpen: boolean) => void
+}
+
+export function NavMenu({ isMenuOpen, onMenuOpenChange }: NavMenuProps) {
   const { open: openWaitlistModal } = useJoinWaitlistModal()
   const pathname = usePathname()
   const menuRef = useRef<HTMLDivElement>(null)
@@ -19,30 +23,30 @@ export function NavMenu() {
   useEffect(() => {
     function handlePageKeyPress(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        setIsMenuOpen(false)
+        onMenuOpenChange(false)
       }
     }
     document.addEventListener('keydown', handlePageKeyPress)
     return () => document.removeEventListener('keydown', handlePageKeyPress)
-  }, [])
+  }, [onMenuOpenChange])
 
   // close the menu on click outside
   useEffect(() => {
     function handlePageClick(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false)
+        onMenuOpenChange(false)
       }
     }
     if (isMenuOpen) {
       document.addEventListener('mousedown', handlePageClick)
     }
     return () => document.removeEventListener('mousedown', handlePageClick)
-  }, [isMenuOpen])
+  }, [isMenuOpen, onMenuOpenChange])
 
   return (
     <div ref={menuRef} className="relative md:hidden">
       <button
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        onClick={() => onMenuOpenChange(!isMenuOpen)}
         aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
         className="cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
       >
@@ -62,7 +66,7 @@ export function NavMenu() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => onMenuOpenChange(false)}
                   className={cn(
                     'block w-full border-b border-border/50 py-3.5 text-base transition-colors last:border-none hover:text-foreground',
                     pathname === item.href
@@ -75,7 +79,7 @@ export function NavMenu() {
               ))}
               <button
                 onClick={() => {
-                  setIsMenuOpen(false)
+                  onMenuOpenChange(false)
                   openWaitlistModal()
                 }}
                 className="w-full cursor-pointer border-b border-border/50 py-3.5 text-left text-base text-blue-400 transition-colors hover:text-blue-300"
@@ -85,7 +89,7 @@ export function NavMenu() {
               <ThemeToggle
                 showLabel
                 className="w-full py-3.5"
-                onThemeToggle={() => setIsMenuOpen(false)}
+                onThemeToggle={() => onMenuOpenChange(false)}
               />
             </nav>
           </div>
