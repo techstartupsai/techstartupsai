@@ -2,15 +2,24 @@
 
 # TechStartups AI — Claude Code context
 
-## What this project is
+techstartups.ai monorepo — startup intelligence platform for job seekers, founders, and investors.
 
-TechStartups AI (techstartups.ai) — a startup intelligence platform for three user types:
+**Human-facing reference:** [Claude Code Playbook](https://www.notion.so/33562400378d81918025e648e4919663)
 
-- Job seekers: find stable, growing companies before job postings go live
-- Founders: raise smarter, get discovered by investors
-- Investors: source deals before they're obvious
+## Skills
 
-Each user type has Free / Tier 1 / Tier 2 plans. Users can subscribe to multiple types simultaneously (25% off each add-on). 14-day free trial on all paid tiers.
+`.claude/skills/` holds auto-applied coding patterns. Consult the relevant skill when the task matches its description.
+
+| Slug              | When to apply                                                               |
+| ----------------- | --------------------------------------------------------------------------- |
+| `design-system`   | Importing UI components, writing components with `className`, adding shadcn |
+| `jsx-conventions` | Writing JSX with apostrophes, quotes, or multi-line headings                |
+| `code-style`      | Writing or reviewing any TypeScript / JavaScript                            |
+| `git-discipline`  | Any time changes are ready to commit                                        |
+
+## Architectural decisions
+
+`/docs/decisions/` will hold ADRs mirrored from the Notion Decision Log. _(Folder not yet created — separate task.)_
 
 ## Monorepo structure
 
@@ -31,7 +40,7 @@ techstartupsai/
 
 ## Tech stack
 
-- **Next.js 14 App Router** — NO `pages/` directory, ever. All routes in `app/`.
+- **Next.js 14 App Router** — no `pages/` directory, ever. All routes in `app/`.
 - **shadcn/ui + Tailwind CSS v4** — dark mode via `@custom-variant dark (&:is(.dark *))` in globals.css (no tailwind.config.ts)
 - **next-themes** — dark/light toggle, system preference + localStorage
 - **Supabase** — PostgreSQL, auth (email + Google OAuth), RLS
@@ -64,91 +73,33 @@ techstartupsai/
 | `/dashboard/investor` | `app/(app)/dashboard/investor/page.tsx` | `InvestorDashboardPage` | Pending     |
 | `/settings`           | `app/(app)/settings/page.tsx`           | `SettingsPage`          | Pending     |
 
+## Coding conventions
+
+- **Tailwind only** — no inline styles, no CSS modules, no hardcoded hex values
+- All colours must work in **light AND dark mode** via Tailwind semantic classes
+- **TypeScript strict mode** throughout — no `any`, no `as` casts without justification
+- **Event handler functions** use the `handle` prefix: `handleClickUserType`, `handleJoinWaitlist`, `handleThemeClick`
+- **Event handler props** use the `on` prefix: `onThemeToggle`, `onClick`, `onSubmit` — reserved for props only, never for local handler functions
+- See skill files for `cn()` usage, naming, brace style, comment style, and JSX text rules
+
 ## Test conventions
 
 - Each `*.test.ts` file is self-contained and readable in isolation. Prefer slight duplication over clever abstraction.
 - Global setup (env vars, `vi.clearAllMocks()`) lives in `apps/web/test/setup.ts`, wired in via `vitest.config.mts` `setupFiles`.
 - Mocks for the route under test live in the test file itself, not extracted into shared helpers.
-- Route-specific `beforeEach` defaults (e.g. "happy path returns success") stay in the test file — what counts as the happy path varies per route.
-- **Rule of three:** don't extract a test helper until the same pattern appears in 3+ files. With two examples you're guessing at the abstraction; with three you can see the shape.
-- DRY applies less to tests than to production code. The right amount of test boilerplate is whatever lets a reader understand a single test by reading only that test.
+- Route-specific `beforeEach` defaults stay in the test file — what counts as the happy path varies per route.
+- **Rule of three:** don't extract a test helper until the same pattern appears in 3+ files.
 - **Colocated test files:** `route.test.ts` next to `route.ts` (or `route.tsx`). No `__tests__/` directories.
 - **Mocking:** use `vi.mock()` at the import boundary, scoped per test file. No shared global mock state — tests must be isolated.
 - **Environment:** API route tests use Vitest with `environment: 'node'` (not jsdom).
 - **Runner:** `bun run test` at root runs all tests via Turborepo.
 
-## Coding conventions
-
-- **Tailwind only** — no inline styles, no CSS modules, no hardcoded hex values
-- All colours must work in **light AND dark mode** via Tailwind semantic classes
-- Use **shadcn/ui components** from packages/ui wherever they fit
-- **TypeScript strict mode** throughout — no `any`, no `as` casts without justification
-- Always use `cn` from `@techstartups/ui` for class merging — never string concatenation or template literals for Tailwind classes
-- Every component that accepts a `className` prop must pass it through `cn`
-
-## Naming conventions
-
-- **No abbreviations or acronyms in variable names.** Write the full word, always.
-  - `res` → `response`
-  - `req` → `request`
-  - `err` → `error`
-  - `btn` → `button`
-  - `val` → `value`
-  - `idx` → `index`
-  - `e` → `event`
-  - `cb` → `callback`
-  - `fn` → `function` (or a descriptive name)
-  - `tmp` / `temp` → descriptive name for what it actually holds
-- Exception: well-established domain abbreviations that are clearer than the full word (`url`, `id`, `api`, `html`, `css`, `sdk`) are fine.
-- **Boolean variables and props must be prefixed with `is`, `has`, `can`, `should`, or `will`.** Examples: `isPopular`, `isLoading`, `hasError`, `canSubmit`.
-
-## Comment style
-
-Reference commit: `0367a955` (`add comments for readibility`)
-
-- Use `//` comments, not JSDoc `/** */`, even for exported items
-- Place the comment **above** the block it describes — never inline at the end of a line
-- One comment per logical group of lines; the comment acts as the visual separator (no blank line needed between comment and code)
-- Keep comments short and lowercase: `// close the menu on escape key press`, `// parse the request body`
-- JSX section comments use `{/* section name */}` — simple, no decorators or dividers
-
-```typescript
-// ✅ correct style
-// parse the request body
-const body: unknown = await request.json()
-const result = schema.safeParse(body)
-
-// handle errors
-if (!result.success) {
-  return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
-}
-```
-
-- **Event handler functions use the `handle` prefix**: `handleClickUserType`, `handleJoinWaitlist`, `handleThemeClick`, `handlePageKeyPress`
-- **Event handler props use the `on` prefix**: `onThemeToggle`, `onClick`, `onSubmit` — the `on` prefix is reserved for props only, never for local handler functions
-
-## Brace style
-
-- **Always use curly braces for if/else blocks — even single-line ones.** Never omit braces.
-
-```typescript
-// ❌ never
-if (response.ok) setSubmitted(true)
-
-// ✅ always
-if (response.ok) {
-  setSubmitted(true)
-}
-```
-
-- Same rule applies to `for`, `while`, and `else` blocks — always braces, always a new line.
-
 ## AI conventions
 
-- No LangChain — direct SDK calls to Anthropic/OpenAI only
+- No LangChain — direct SDK calls to Anthropic only
 - Prompts live in Supabase `prompts` table, not in code
 - Models live in Supabase `models` table, not hardcoded
-- **Never hardcode a model name, provider, temperature, or max_tokens anywhere in the codebase — ever.** Any literal like `claude-sonnet-4-6` or `anthropic` in application code is a bug. Everything loads from `models` at runtime. See DEC-015.
+- **Never hardcode a model name, provider, temperature, or max_tokens anywhere in the codebase — ever.** Everything loads from `models` at runtime. See DEC-015.
 
 ## Key database tables
 
@@ -164,14 +115,14 @@ if (response.ok) {
 
 Always read the relevant Notion page before building a feature:
 
-- Architecture: [https://www.notion.so/33562400378d803e936fd6866881b3e8](https://www.notion.so/33562400378d803e936fd6866881b3e8)
-- File & Route Structure: [https://www.notion.so/33562400378d81f68254ea465d579884](https://www.notion.so/33562400378d81f68254ea465d579884)
-- Product Specs (tiers + features): [https://www.notion.so/33562400378d80ec929cc644350e344f](https://www.notion.so/33562400378d80ec929cc644350e344f)
-- Decision Log: [https://www.notion.so/33562400378d805e9315f03fea059619](https://www.notion.so/33562400378d805e9315f03fea059619)
-- Design & Mockups: [https://www.notion.so/33562400378d81e39209f9ca595d2617](https://www.notion.so/33562400378d81e39209f9ca595d2617)
-- Global Layout spec: [https://www.notion.so/33562400378d81378413c71c4605bb33](https://www.notion.so/33562400378d81378413c71c4605bb33)
-- Landing Page spec + source: [https://www.notion.so/33562400378d81ef91f5e13bf51c06e0](https://www.notion.so/33562400378d81ef91f5e13bf51c06e0)
-- Pricing Page spec + source: [https://www.notion.so/33562400378d818f84a7ec4682869a43](https://www.notion.so/33562400378d818f84a7ec4682869a43)
+- Architecture: https://www.notion.so/33562400378d803e936fd6866881b3e8
+- File & Route Structure: https://www.notion.so/33562400378d81f68254ea465d579884
+- Product Specs (tiers + features): https://www.notion.so/33562400378d80ec929cc644350e344f
+- Decision Log: https://www.notion.so/33562400378d805e9315f03fea059619
+- Design & Mockups: https://www.notion.so/33562400378d81e39209f9ca595d2617
+- Global Layout spec: https://www.notion.so/33562400378d81378413c71c4605bb33
+- Landing Page spec + source: https://www.notion.so/33562400378d81ef91f5e13bf51c06e0
+- Pricing Page spec + source: https://www.notion.so/33562400378d818f84a7ec4682869a43
 
 ## Rules for every session
 
@@ -181,54 +132,4 @@ Always read the relevant Notion page before building a feature:
 4. Stop after each logical unit and wait for review before continuing
 5. One commit per logical unit — never bundle unrelated changes
 6. Each commit must be independently deployable to Vercel
-7. **Never commit or push.** Make the changes, then stop and suggest a commit message. The human will review, edit if needed, and commit manually.
-
-## Refactor Log
-
-Whenever a refactor is made during implementation — whether initiated by Claude Code
-
-or requested via Cursor review — log it here before ending the session.
-
-Format:
-
-### [DATE] [File or module affected]
-
-- **What changed:** Brief description
-- **Why:** Reason (e.g. simplify, performance, convention alignment)
-- **Impact:** Any downstream files or patterns affected
-
-## Workflow
-
-- Tasks come from Notion Sprint / Tasks page
-- Claude Code (Warp) implements; Cursor is used for review and inline edits
-- After Cursor review, Claude Code applies the requested changes
-- All refactors are logged in the Refactor Log above before session end
-- Mark tasks ✅ Done in Notion after completion
-
-## Refactor Log
-
-Whenever a refactor is made during implementation — whether initiated by Claude Code
-or requested via Cursor review — log it here before ending the session.
-
-Format:
-
-### [DATE] [File or module affected]
-
-- **What changed:** Brief description
-- **Why:** Reason (e.g. simplify, performance, convention alignment)
-- **Impact:** Any downstream files or patterns affected
-
-## Workflow
-
-- Tasks come from Notion Sprint / Tasks page
-- Claude Code (Warp) implements; Cursor is used for review and inline edits
-- After Cursor review, Claude Code applies the requested changes
-- All refactors are logged in the Refactor Log above before session end
-- Mark tasks ✅ Done in Notion after completion
-
-## JSX Text Encoding
-
-Never use HTML entities (', ", &) for apostrophes or quotes in JSX text content.
-Instead, wrap the string in a JS expression:
-✅ {"We're working on our first posts."}
-❌ We're working on our first posts.
+7. Never commit or push — see `git-discipline` skill
