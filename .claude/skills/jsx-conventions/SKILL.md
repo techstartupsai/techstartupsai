@@ -1,7 +1,36 @@
 ---
 name: jsx-conventions
-description: JSX text, layout, and event handler naming conventions for the techstartups.ai monorepo. Use when writing or editing JSX — covers apostrophes, quotes, multi-line headings, and handle/on naming.
+description: JSX text, layout, event handler naming, and link conventions for the techstartups.ai monorepo. Use when writing or editing JSX — covers apostrophes, quotes, multi-line headings, handle/on naming, and links.
 ---
+
+### Links — always use AnchorLink, never raw Link or a tags
+
+Never use Next.js `<Link>` or a bare `<a>` directly in JSX. Always use `AnchorLink` from `apps/web/components/AnchorLink.tsx`. It routes internally (client-side nav), externally (`target="_blank"` + correct `rel`), and for scheme links (`mailto:`, `tel:`) automatically based on the `href`.
+
+```typescript
+import { AnchorLink } from '@/components/AnchorLink'
+
+// internal route — renders Next.js Link
+<AnchorLink href="/pricing">See pricing</AnchorLink>
+
+// in-page anchor
+<AnchorLink href="#features">Jump to features</AnchorLink>
+
+// external — renders <a target="_blank" rel="noopener noreferrer">
+<AnchorLink href="https://example.com">Visit site</AnchorLink>
+
+// external with SEO nofollow
+<AnchorLink href="https://partner.com" noFollow>Partner</AnchorLink>
+
+// scheme link — renders plain <a>, no target/rel
+<AnchorLink href="mailto:hello@techstartups.ai">Email us</AnchorLink>
+
+// never — import and use Link or <a> directly
+import Link from 'next/link'
+<Link href="/pricing">...</Link>   // wrong
+<a href="/pricing">...</a>         // wrong
+<a href="https://example.com" target="_blank">...</a>  // wrong
+```
 
 ### Event handler naming
 
