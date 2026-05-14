@@ -18,6 +18,7 @@
     "db:push": "bunx dotenv -e .env.local -- supabase db push",
     "db:reset": "bunx dotenv -e .env.local -- supabase db reset",
     "test": "turbo test",
+    "blog:sync": "bunx dotenv -e .env.local -- bun apps/cron/src/scripts/blog-sync.ts",
     "email:dev": "bun run --filter @techstartups/emails dev"
   },
   "devDependencies": {

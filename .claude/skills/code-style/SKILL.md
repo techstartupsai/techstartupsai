@@ -35,11 +35,16 @@ Boolean variables and props must be prefixed with `is`, `has`, `can`, `should`, 
 
 ### Always use curly braces on control flow
 
-Always use curly braces for `if` / `else` blocks — even single-line ones. Same rule for `for`, `while`, and `else`.
+Always use curly braces for `if` / `else` blocks — even single-line ones. Same rule for `for`, `while`, and `else`. The body always goes on its own line — never on the same line as the brace.
 
 ```typescript
 // never
 if (response.ok) setSubmitted(true)
+
+// never
+if (response.ok) {
+  setSubmitted(true)
+}
 
 // always
 if (response.ok) {
@@ -47,10 +52,60 @@ if (response.ok) {
 }
 ```
 
+### JSDoc for exported functions
+
+One-line block comment above every exported function. Describe what it does, not how.
+
+```typescript
+/*
+ * Validates and parses raw frontmatter against the post schema.
+ */
+export function validateFrontmatter(data: unknown): Frontmatter { ... }
+```
+
+Never use `/** */` double-star JSDoc or multi-line descriptions. One line only.
+
+### Discriminated unions
+
+When a type has a status/kind field and other fields that only apply to certain variants, model each variant as its own union member — do not use optional fields to paper over structural differences.
+
+```typescript
+// never — error is optional but only meaningful on failure
+interface Result {
+  status: 'success' | 'failed'
+  data?: string
+  error?: unknown
+}
+
+// always — each variant carries only what it owns
+type Result = { status: 'success'; data: string } | { status: 'failed'; error: unknown }
+```
+
+This applies to return types, API response shapes, and any data that has meaningfully different shapes depending on a discriminant field.
+
+### Branded types
+
+Use branded types to distinguish semantically different strings (or numbers) that TypeScript would otherwise treat as interchangeable.
+
+```typescript
+// define the brand
+type Email = string & { readonly _brand: 'Email' }
+type Slug = string & { readonly _brand: 'Slug' }
+
+// apply at the validation boundary — Zod transform is the cleanest place
+const emailSchema = z.email().transform((value) => value as Email)
+const slugField = z.string().transform((value) => value as Slug)
+```
+
+Good candidates: validated email addresses, post slugs, user IDs, tokens, any string with a clear semantic identity where accidental mixing with another string would be a bug. Apply at the validation/parsing boundary so the brand flows through naturally — don't scatter casts throughout the codebase.
+
+Poor candidates: env vars used immediately in one place, strings that are only ever used as plain strings and never compared or mixed with other string types.
+
 ### Comment style
 
-- Place the comment above the block it describes. Never inline at the end of a line.
-- One comment per logical group of lines; no blank line between comment and code.
+- Comment every logical group of lines — be verbose. A reader should be able to skim comments alone and understand the full flow.
+- Place the comment on the line immediately above the group it describes. Never inline at the end of a line.
+- No blank line between the comment and the code it describes.
 - Keep comments short and lowercase.
 - JSX section comments use `{/* section name */}`.
 
@@ -59,8 +114,22 @@ if (response.ok) {
 const body: unknown = await request.json()
 const result = schema.safeParse(body)
 
-// handle errors
+// reject invalid input
 if (!result.success) {
   return Response.json({ error: 'Invalid input' }, { status: 400 })
 }
+
+// verify the shared secret
+const { secret } = result.data
+if (secret !== process.env.MY_SECRET) {
+  return Response.json({ error: 'Unauthorized' }, { status: 401 })
+}
+
+// write the record to the database
+const { error } = await supabase.from('table').insert(result.data)
+if (error) {
+  return Response.json({ error: 'Database error' }, { status: 500 })
+}
+
+return Response.json({ success: true })
 ```

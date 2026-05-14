@@ -1,6 +1,9 @@
 import { z } from 'zod'
 
-export const emailSchema = z.email('Invalid email address')
+// branded type for validated email addresses — distinguishes a validated email from a raw string
+export type Email = string & { readonly _brand: 'Email' }
+
+export const emailSchema = z.email('Invalid email address').transform((value) => value as Email)
 
 export const userTypeSchema = z.enum(['job_seeker', 'founder', 'investor'])
 export type UserType = z.infer<typeof userTypeSchema>

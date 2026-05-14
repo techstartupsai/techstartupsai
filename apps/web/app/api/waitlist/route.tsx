@@ -10,6 +10,9 @@ import { waitlistRequestSchema } from '@/lib/schemas'
 
 const POSTGRES_UNIQUE_VIOLATION = '23505'
 
+/*
+ * Adds an email to the waitlist, sends confirmation and admin notification emails.
+ */
 export async function POST(request: Request) {
   // parse the request body
   const body: unknown = await request.json()
@@ -20,8 +23,8 @@ export async function POST(request: Request) {
 
   // verify the turnstile token
   const { email, userTypes, turnstileToken } = result.data
-  const isHuman = await verifyTurnstileToken(turnstileToken)
-  if (!isHuman) {
+  const verification = await verifyTurnstileToken(turnstileToken)
+  if (!verification.success) {
     return NextResponse.json({ error: 'Verification failed. Please try again.' }, { status: 400 })
   }
 

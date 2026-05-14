@@ -10,12 +10,12 @@ techstartups.ai monorepo — startup intelligence platform for job seekers, foun
 
 `.claude/skills/` holds auto-applied coding patterns. Consult the relevant skill when the task matches its description.
 
-| Slug              | When to apply                                                               |
-| ----------------- | --------------------------------------------------------------------------- |
-| `design-system`   | Importing UI components, writing components with `className`, adding shadcn |
-| `jsx-conventions` | Writing JSX with apostrophes, quotes, or multi-line headings                |
-| `code-style`      | Writing or reviewing any TypeScript / JavaScript                            |
-| `git-discipline`  | Any time changes are ready to commit                                        |
+| Slug              | When to apply                                                                    |
+| ----------------- | -------------------------------------------------------------------------------- |
+| `design-system`   | Importing UI components, writing components with `className`, adding shadcn      |
+| `jsx-conventions` | Writing any JSX — apostrophes, quotes, multi-line headings, event handler naming |
+| `code-style`      | Writing or reviewing any TypeScript / JavaScript                                 |
+| `git-discipline`  | Any time changes are ready to commit                                             |
 
 ## Architectural decisions
 
@@ -27,6 +27,7 @@ techstartups.ai monorepo — startup intelligence platform for job seekers, foun
 techstartupsai/
 ├── apps/
 │   ├── web/              ← Next.js 14 App Router (frontend + API routes)
+│   ├── cron/             ← TypeScript Bun scripts (@techstartups/cron): blog-sync, future scheduled jobs
 │   └── ai-service/       ← AI inference jobs (TypeScript + Python sidecar)
 ├── emails/               ← React Email templates (@techstartups/emails), shared across apps
 ├── packages/
@@ -78,9 +79,7 @@ techstartupsai/
 - **Tailwind only** — no inline styles, no CSS modules, no hardcoded hex values
 - All colours must work in **light AND dark mode** via Tailwind semantic classes
 - **TypeScript strict mode** throughout — no `any`, no `as` casts without justification
-- **Event handler functions** use the `handle` prefix: `handleClickUserType`, `handleJoinWaitlist`, `handleThemeClick`
-- **Event handler props** use the `on` prefix: `onThemeToggle`, `onClick`, `onSubmit` — reserved for props only, never for local handler functions
-- See skill files for `cn()` usage, naming, brace style, comment style, and JSX text rules
+- See skill files for `cn()` usage, naming, brace style, comment style, JSX text rules, and event handler naming
 
 ## Test conventions
 
@@ -94,12 +93,49 @@ techstartupsai/
 - **Environment:** API route tests use Vitest with `environment: 'node'` (not jsdom).
 - **Runner:** `bun run test` at root runs all tests via Turborepo.
 
+## Blog content pipeline (`apps/cron`)
+
+`apps/cron` is a first-class Bun TypeScript workspace for offline scripts and scheduled jobs. It is not served — it runs from the CLI or a cron job.
+
+### blog:sync workflow
+
+Run from the repo root:
+
+```bash
+bun run blog:sync              # incremental — only posts whose content_hash changed
+bun run blog:sync --file slug  # single post by filename (no .mdx extension)
+bun run blog:sync --all        # force re-embed everything
+```
+
+The script (`apps/cron/src/scripts/blog-sync.ts`):
+
+1. Reads all `apps/web/content/blog/<category>/*.mdx` files
+2. Parses frontmatter with `gray-matter`, validates with Zod
+3. Strips MDX → plain text via `unified` + `remark-parse` + `remark-mdx` + a custom AST walker (skips import/JSX/expression nodes)
+4. Computes `content_hash = sha256(canonical frontmatter JSON + raw body)` — skips unchanged posts
+5. Generates embedding via `apps/cron/src/lib/embeddings.ts` (OpenAI `text-embedding-3-small`, 1536d)
+6. Upserts into `blog_posts` (Supabase), preserving `created_at`
+7. On success, calls `POST /api/revalidate` to trigger ISR for `/blog`
+
+Embedding logic is isolated in `apps/cron/src/lib/embeddings.ts`. OpenAI is hardcoded for embeddings (diverges from runtime-config principle for chat models — see DEC-030). A future provider swap is a one-file edit + `bun run blog:sync --all`.
+
+### apps/cron conventions
+
+- Entry points live in `apps/cron/src/scripts/`
+- Shared helpers live in `apps/cron/src/lib/`
+- Env loaded via `dotenv -e .env.local` in the `blog:sync` script
+- Uses `@techstartups/db/server` (`createServiceRoleClient`) — never import `@supabase/supabase-js` directly in apps/cron
+- `SUPABASE_SECRET_KEY` is the service role key (not `SUPABASE_SERVICE_ROLE_KEY`)
+- `OPENAI_API_KEY` required for embedding generation
+- `REVALIDATE_SECRET` required for ISR cache busting
+
 ## AI conventions
 
 - No LangChain — direct SDK calls to Anthropic only
 - Prompts live in Supabase `prompts` table, not in code
 - Models live in Supabase `models` table, not hardcoded
 - **Never hardcode a model name, provider, temperature, or max_tokens anywhere in the codebase — ever.** Everything loads from `models` at runtime. See DEC-015.
+- Exception: `apps/cron/src/lib/embeddings.ts` hardcodes `text-embedding-3-small` — embeddings are corpus-level, not request-level. See DEC-030.
 
 ## Key database tables
 

@@ -1,7 +1,31 @@
 ---
 name: jsx-conventions
-description: JSX text and layout conventions for the techstartups.ai monorepo. Use when writing or editing JSX that contains apostrophes, quotes, or multi-line headings. Covers HTML entity avoidance and Tailwind-idiomatic line breaks.
+description: JSX text, layout, and event handler naming conventions for the techstartups.ai monorepo. Use when writing or editing JSX — covers apostrophes, quotes, multi-line headings, and handle/on naming.
 ---
+
+### Event handler naming
+
+Local callback functions use the `handle` prefix. Props that receive a callback use the `on` prefix. Never mix them.
+
+```typescript
+// local handler function — always handle prefix
+function handleJoinWaitlist() { ... }
+function handleClickUserType(userType: UserType) { ... }
+
+// prop that accepts a callback — always on prefix
+interface CardProps {
+  onSelect: (id: string) => void
+  onDismiss: () => void
+}
+
+// never use on prefix for a local function
+function onSubmit() { ... }  // wrong
+
+// never use handle prefix for a prop
+interface CardProps {
+  handleSelect: () => void  // wrong
+}
+```
 
 ### Apostrophes and quotes — never HTML entities
 
