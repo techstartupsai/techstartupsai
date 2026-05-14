@@ -32,6 +32,9 @@ const USER_TYPE_LABELS: Record<UserType, string> = {
 
 const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
+/*
+ * Full-screen modal for joining the waitlist with email and role selection.
+ */
 export function JoinWaitlistModal() {
   const { isOpen: isWaitlistModalOpen, close: closeWaitlistModal } = useJoinWaitlistModal()
   const [email, setEmail] = useState('')

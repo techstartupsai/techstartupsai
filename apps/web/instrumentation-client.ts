@@ -1,40 +1,27 @@
-// This file configures the initialization of Sentry on the client.
-// The added config here will be used whenever a users loads a page in their browser.
-// https://docs.sentry.io/platforms/javascript/guides/nextjs/
-
 import * as Sentry from '@sentry/nextjs'
 import posthog from 'posthog-js'
 
+// initialize sentry with session replay
 Sentry.init({
   dsn: 'https://55944bf2d881307627576480e791e182@o4511141633654784.ingest.us.sentry.io/4511141637455872',
-
-  // Add optional integrations for additional features
   integrations: [Sentry.replayIntegration()],
-
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,
-  // Enable logs to be sent to Sentry
   enableLogs: true,
-
-  // Define how likely Replay events are sampled.
-  // This sets the sample rate to be 10%. You may want this to be 100% while
-  // in development and sample at a lower rate in production
   replaysSessionSampleRate: 0.1,
-
-  // Define how likely Replay events are sampled when an error occurs.
   replaysOnErrorSampleRate: 1.0,
-
-  // Enable sending user PII (Personally Identifiable Information)
-  // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/#sendDefaultPii
   sendDefaultPii: true,
 })
 
+// initialize posthog — pageview is captured manually via onRouterTransitionStart
 posthog.init(process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN!, {
   api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-  capture_pageview: false, // handled manually via onRouterTransitionStart
+  capture_pageview: false,
   capture_pageleave: true,
 })
 
+/*
+ * Captures a Sentry router transition and a PostHog pageview on every navigation.
+ */
 export function onRouterTransitionStart(
   url: string,
   navigationType: 'push' | 'replace' | 'traverse'

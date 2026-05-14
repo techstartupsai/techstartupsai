@@ -1,15 +1,20 @@
+import { AnchorLink } from '@/components/AnchorLink'
+
+/*
+ * Terms of service page.
+ */
 export default function TermsPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
       <h1 className="mb-2 text-3xl font-bold tracking-tight">Terms of Service</h1>
       <p className="mb-12 text-sm">
         Effective date: January 1, 2026 · Last updated: April 2, 2026 · Contact:{' '}
-        <a
+        <AnchorLink
           href="mailto:hello@techstartups.ai"
           className="text-primary underline-offset-4 hover:underline"
         >
           hello@techstartups.ai
-        </a>
+        </AnchorLink>
       </p>
 
       <div className="flex flex-col gap-10 text-sm leading-relaxed">
@@ -175,12 +180,12 @@ export default function TermsPage() {
           <p className="mb-1">For questions about these Terms:</p>
           <p>
             Email:{' '}
-            <a
+            <AnchorLink
               href="mailto:hello@techstartups.ai"
               className="text-primary underline-offset-4 hover:underline"
             >
               hello@techstartups.ai
-            </a>
+            </AnchorLink>
           </p>
         </section>
       </div>

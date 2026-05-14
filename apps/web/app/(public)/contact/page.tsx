@@ -1,3 +1,8 @@
+import { AnchorLink } from '@/components/AnchorLink'
+
+/*
+ * Contact page — email links for general enquiries, press, and support.
+ */
 export default function ContactPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
@@ -13,12 +18,12 @@ export default function ContactPage() {
           <p className="mb-3 text-sm text-muted-foreground">
             Questions, feedback, partnership ideas.
           </p>
-          <a
+          <AnchorLink
             href="mailto:hello@techstartups.ai"
             className="text-sm text-primary underline-offset-4 hover:underline"
           >
             hello@techstartups.ai
-          </a>
+          </AnchorLink>
         </div>
 
         <div className="rounded-xl border border-border bg-card p-6">
@@ -27,12 +32,12 @@ export default function ContactPage() {
           <p className="mb-3 text-sm text-muted-foreground">
             Interview requests, press kit, and media assets.
           </p>
-          <a
+          <AnchorLink
             href="mailto:press@techstartups.ai"
             className="text-sm text-primary underline-offset-4 hover:underline"
           >
             press@techstartups.ai
-          </a>
+          </AnchorLink>
         </div>
 
         <div className="rounded-xl border border-border bg-card p-6">
@@ -41,12 +46,12 @@ export default function ContactPage() {
           <p className="mb-3 text-sm text-muted-foreground">
             Billing, account issues, and technical help.
           </p>
-          <a
+          <AnchorLink
             href="mailto:support@techstartups.ai"
             className="text-sm text-primary underline-offset-4 hover:underline"
           >
             support@techstartups.ai
-          </a>
+          </AnchorLink>
         </div>
       </div>
     </div>

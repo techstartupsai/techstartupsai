@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { AnchorLink } from '@/components/AnchorLink'
 import { Menu, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
@@ -14,6 +14,9 @@ interface NavMenuProps {
   onMenuOpenChange: (isOpen: boolean) => void
 }
 
+/*
+ * Mobile hamburger menu that slides down from the header.
+ */
 export function NavMenu({ isMenuOpen, onMenuOpenChange }: NavMenuProps) {
   const { open: openWaitlistModal } = useJoinWaitlistModal()
   const pathname = usePathname()
@@ -63,7 +66,7 @@ export function NavMenu({ isMenuOpen, onMenuOpenChange }: NavMenuProps) {
           <div className="border-b border-border bg-background shadow-xl">
             <nav className="flex flex-col px-4 py-3">
               {NAV_ITEMS.map((item) => (
-                <Link
+                <AnchorLink
                   key={item.href}
                   href={item.href}
                   onClick={() => onMenuOpenChange(false)}
@@ -75,7 +78,7 @@ export function NavMenu({ isMenuOpen, onMenuOpenChange }: NavMenuProps) {
                   )}
                 >
                   {item.label}
-                </Link>
+                </AnchorLink>
               ))}
               <button
                 onClick={() => {

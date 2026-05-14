@@ -61,6 +61,9 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 }
 
+/*
+ * Root HTML shell — applies fonts, theme provider, and global layout.
+ */
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={cn(oxanium.variable, figtree.variable)} suppressHydrationWarning>

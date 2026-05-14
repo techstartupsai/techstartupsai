@@ -1,11 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { AnchorLink } from '@/components/AnchorLink'
 import { NavLinks } from './NavLinks'
 import { NavMenu } from './NavMenu'
 
+/*
+ * Sticky site header with blur-on-scroll and mobile menu.
+ */
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -30,9 +33,9 @@ export function Header() {
       )}
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <Link href="/" className="text-base font-semibold text-foreground">
+        <AnchorLink href="/" className="text-base font-semibold text-foreground">
           <span className="text-2xl">🚀</span> TechStartups<span className="text-primary">.ai</span>
-        </Link>
+        </AnchorLink>
         <NavLinks />
         <NavMenu isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} />
       </div>

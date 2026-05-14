@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     'TechStartups.ai — AI-powered startup intelligence for job seekers, founders, and investors.',
 }
 
+/*
+ * About page — mission, approach, and audience.
+ */
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">

@@ -4,6 +4,9 @@ import * as Sentry from '@sentry/nextjs'
 import NextError from 'next/error'
 import { useEffect } from 'react'
 
+/*
+ * Top-level error boundary rendered when a fatal error occurs outside any route segment.
+ */
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
   useEffect(() => {
     Sentry.captureException(error)
@@ -12,10 +15,7 @@ export default function GlobalError({ error }: { error: Error & { digest?: strin
   return (
     <html lang="en">
       <body>
-        {/* `NextError` is the default Next.js error page component. Its type
-        definition requires a `statusCode` prop. However, since the App Router
-        does not expose status codes for errors, we simply pass 0 to render a
-        generic error message. */}
+        {/* app router doesn't expose status codes — pass 0 to render the generic error message */}
         <NextError statusCode={0} />
       </body>
     </html>

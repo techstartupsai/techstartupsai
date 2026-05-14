@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   FaLinkedin,
@@ -15,6 +14,7 @@ import {
 } from 'react-icons/fa6'
 import { SiSubstack, SiBluesky, SiThreads } from 'react-icons/si'
 import { cn } from '@/lib/utils'
+import { AnchorLink } from '@/components/AnchorLink'
 
 const FOOTER_LINKS = [
   { label: 'Privacy', href: '/privacy' },
@@ -47,6 +47,9 @@ const SOCIAL_LINKS = [
   { title: 'Facebook', href: 'https://www.facebook.com/techstartupsai', icon: FaFacebook },
 ]
 
+/*
+ * Site-wide footer with social links and navigation.
+ */
 export function Footer() {
   const pathname = usePathname()
 
@@ -56,27 +59,25 @@ export function Footer() {
         {/* social icons */}
         <div className="mb-4 flex flex-wrap items-center justify-center gap-5">
           {SOCIAL_LINKS.map(({ title, href, icon: Icon }) => (
-            <a
+            <AnchorLink
               key={title}
               href={href}
               title={title}
-              target="_blank"
-              rel="noopener noreferrer"
               className="text-muted-foreground transition-colors hover:text-foreground"
             >
               <Icon className="h-5 w-5" />
-            </a>
+            </AnchorLink>
           ))}
         </div>
 
         {/* footer links */}
         <div className="flex flex-col items-center gap-4 text-sm text-muted-foreground sm:flex-row sm:justify-between">
-          <Link href="/" className="text-base font-semibold text-foreground">
+          <AnchorLink href="/" className="text-base font-semibold text-foreground">
             TechStartups<span className="text-primary">.ai</span>
-          </Link>
+          </AnchorLink>
           <nav className="flex items-center gap-4">
             {FOOTER_LINKS.map(({ label, href }) => (
-              <Link
+              <AnchorLink
                 key={href}
                 href={href}
                 className={cn(
@@ -85,7 +86,7 @@ export function Footer() {
                 )}
               >
                 {label}
-              </Link>
+              </AnchorLink>
             ))}
           </nav>
           <p>© 2026 TechStartups AI</p>

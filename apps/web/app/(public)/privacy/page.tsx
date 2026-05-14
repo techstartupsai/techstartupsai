@@ -1,15 +1,20 @@
+import { AnchorLink } from '@/components/AnchorLink'
+
+/*
+ * Privacy policy page.
+ */
 export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
       <h1 className="mb-2 text-3xl font-bold tracking-tight">Privacy Policy</h1>
       <p className="mb-12 text-sm">
         Effective date: January 1, 2026 · Last updated: April 2, 2026 · Contact:{' '}
-        <a
+        <AnchorLink
           href="mailto:hello@techstartups.ai"
           className="text-primary underline-offset-4 hover:underline"
         >
           hello@techstartups.ai
-        </a>
+        </AnchorLink>
       </p>
 
       <div className="flex flex-col gap-10 text-sm leading-relaxed">
@@ -155,12 +160,12 @@ export default function PrivacyPage() {
           <p>
             No system is completely secure. If you believe your account has been compromised,
             contact us immediately at{' '}
-            <a
+            <AnchorLink
               href="mailto:hello@techstartups.ai"
               className="text-primary underline-offset-4 hover:underline"
             >
               hello@techstartups.ai
-            </a>
+            </AnchorLink>
             .
           </p>
         </section>
@@ -200,12 +205,12 @@ export default function PrivacyPage() {
           <p>
             California residents have additional rights under the CCPA. EU and UK residents have
             rights under the GDPR. To exercise any right, email{' '}
-            <a
+            <AnchorLink
               href="mailto:hello@techstartups.ai"
               className="text-primary underline-offset-4 hover:underline"
             >
               hello@techstartups.ai
-            </a>
+            </AnchorLink>
             . We will respond within 30 days.
           </p>
         </section>
@@ -249,12 +254,12 @@ export default function PrivacyPage() {
           <p className="mb-1">For questions, requests, or concerns about this Privacy Policy:</p>
           <p>
             Email:{' '}
-            <a
+            <AnchorLink
               href="mailto:hello@techstartups.ai"
               className="text-primary underline-offset-4 hover:underline"
             >
               hello@techstartups.ai
-            </a>
+            </AnchorLink>
           </p>
         </section>
       </div>

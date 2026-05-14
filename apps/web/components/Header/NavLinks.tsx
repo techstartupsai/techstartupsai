@@ -1,12 +1,15 @@
 'use client'
 
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { AnchorLink } from '@/components/AnchorLink'
 import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
 import { ThemeToggle } from './ThemeToggle'
 import { NAV_ITEMS } from './nav-items'
 
+/*
+ * Desktop navigation links and theme toggle, hidden on mobile.
+ */
 export function NavLinks() {
   const pathname = usePathname()
   const { open: openWaitlistModal } = useJoinWaitlistModal()
@@ -16,7 +19,7 @@ export function NavLinks() {
       {NAV_ITEMS.map((item) => {
         const isActive = pathname === item.href
         return (
-          <Link
+          <AnchorLink
             key={item.href}
             href={item.href}
             className={cn(
@@ -27,7 +30,7 @@ export function NavLinks() {
             )}
           >
             {item.label}
-          </Link>
+          </AnchorLink>
         )
       })}
       <button

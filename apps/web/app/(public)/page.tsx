@@ -151,6 +151,9 @@ const USER_TIERS: UserTier[] = [
   },
 ]
 
+/*
+ * Public landing page — hero, pricing plans, and FAQ.
+ */
 export default function HomePage() {
   const { open: openWaitlistModal } = useJoinWaitlistModal()
 

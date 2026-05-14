@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: 'Startup intelligence insights, product updates, and founder stories.',
 }
 
+/*
+ * Blog index page — lists published posts or an empty state.
+ */
 export default function BlogPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
