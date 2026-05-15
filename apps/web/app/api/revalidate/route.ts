@@ -1,7 +1,7 @@
 import { revalidatePath } from 'next/cache'
 import { NextResponse } from 'next/server'
 
-/*
+/**
  * Busts the Next.js ISR cache for the given paths after verifying the shared secret.
  */
 export async function POST(request: Request): Promise<NextResponse> {

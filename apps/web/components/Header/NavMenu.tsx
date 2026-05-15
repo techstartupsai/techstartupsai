@@ -14,7 +14,7 @@ interface NavMenuProps {
   onMenuOpenChange: (isOpen: boolean) => void
 }
 
-/*
+/**
  * Mobile hamburger menu that slides down from the header.
  */
 export function NavMenu({ isMenuOpen, onMenuOpenChange }: NavMenuProps) {

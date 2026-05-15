@@ -6,7 +6,7 @@ import { AnchorLink } from '@/components/AnchorLink'
 import { NavLinks } from './NavLinks'
 import { NavMenu } from './NavMenu'
 
-/*
+/**
  * Sticky site header with blur-on-scroll and mobile menu.
  */
 export function Header() {

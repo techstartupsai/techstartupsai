@@ -17,8 +17,13 @@ const CategorySchema = z.enum(['soonicorn-of-the-month', 'news-room', 'tech-scen
 const FrontmatterSchema = z.object({
   title: z.string(),
   slug: z.string().transform((slug) => slug as Slug),
-  date: z.iso.date(),
+  date: z.preprocess(
+    (value) => (value instanceof Date ? value.toISOString().split('T')[0] : value),
+    z.iso.date()
+  ),
   author: z.string().default('TechStartups AI'),
+  authorUrl: z.string().url().optional(),
+  readingTime: z.string().optional(),
   category: CategorySchema,
   excerpt: z.string(),
   ogImage: z.string(),
@@ -32,14 +37,14 @@ const FrontmatterSchema = z.object({
 
 type Frontmatter = z.infer<typeof FrontmatterSchema>
 
-/*
+/**
  * Parses and validates raw frontmatter data against the expected schema.
  */
 export function validateFrontmatter(data: unknown): Frontmatter {
   return FrontmatterSchema.parse(data)
 }
 
-/*
+/**
  * Returns a SHA-256 hash of the canonical frontmatter JSON concatenated with the raw MDX body.
  */
 export function computeContentHash(
@@ -82,7 +87,7 @@ function collectText(node: TextNode): string {
   return ''
 }
 
-/*
+/**
  * Strips MDX imports, JSX components, and expressions, returning plain prose.
  */
 export async function extractPlainText(mdxContent: string): Promise<string> {
@@ -186,6 +191,8 @@ async function syncFile(
       title: frontmatter.title,
       excerpt: frontmatter.excerpt,
       author: frontmatter.author,
+      author_url: frontmatter.authorUrl ?? null,
+      reading_time: frontmatter.readingTime ?? null,
       publication_date: frontmatter.date,
       cover_image: frontmatter.coverImage,
       og_image: frontmatter.ogImage,

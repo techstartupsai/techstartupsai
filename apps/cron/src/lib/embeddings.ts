@@ -3,7 +3,7 @@ import OpenAI from 'openai'
 const EMBEDDING_MODEL = 'text-embedding-3-small'
 const EMBEDDING_DIMENSIONS = 1536
 
-/*
+/**
  * Generates a 1536-dimension embedding vector for the given text using OpenAI.
  */
 export async function generateEmbedding(text: string): Promise<{

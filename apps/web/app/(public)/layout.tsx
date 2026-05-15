@@ -1,6 +1,6 @@
 import { Footer } from '@/components/Footer'
 
-/*
+/**
  * Layout wrapper for public pages — adds the footer below main content.
  */
 export default function PublicLayout({ children }: { children: React.ReactNode }) {

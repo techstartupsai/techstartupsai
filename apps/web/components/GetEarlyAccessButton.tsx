@@ -3,7 +3,7 @@
 import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
 import { Button } from '@techstartups/ui'
 
-/*
+/**
  * Opens the join waitlist modal.
  */
 export function GetEarlyAccessButton() {

@@ -10,7 +10,7 @@ interface ThemeToggleProps {
   onThemeToggle?: (theme: 'light' | 'dark') => void
 }
 
-/*
+/**
  * Button that toggles between light and dark theme.
  */
 export function ThemeToggle({ showLabel = false, className, onThemeToggle }: ThemeToggleProps) {

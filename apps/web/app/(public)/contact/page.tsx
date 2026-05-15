@@ -1,6 +1,6 @@
 import { AnchorLink } from '@/components/AnchorLink'
 
-/*
+/**
  * Contact page — email links for general enquiries, press, and support.
  */
 export default function ContactPage() {

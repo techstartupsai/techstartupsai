@@ -1,4 +1,4 @@
-/*
+/**
  * Confirmation page shown after a successful unsubscribe.
  */
 export default function UnsubscribedPage() {

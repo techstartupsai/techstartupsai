@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from './types'
 
-/*
+/**
  * Returns a Supabase client authenticated as the service role, bypassing RLS.
  */
 export function createServiceRoleClient() {

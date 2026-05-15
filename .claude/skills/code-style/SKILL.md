@@ -54,16 +54,14 @@ if (response.ok) {
 
 ### JSDoc for exported functions
 
-One-line block comment above every exported function. Describe what it does, not how.
+Double-star `/** */` block comment above every exported function. One line only. Describe what it does, not how.
 
 ```typescript
-/*
+/**
  * Validates and parses raw frontmatter against the post schema.
  */
 export function validateFrontmatter(data: unknown): Frontmatter { ... }
 ```
-
-Never use `/** */` double-star JSDoc or multi-line descriptions. One line only.
 
 ### Discriminated unions
 

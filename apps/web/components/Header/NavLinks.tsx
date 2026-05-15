@@ -7,7 +7,7 @@ import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
 import { ThemeToggle } from './ThemeToggle'
 import { NAV_ITEMS } from './nav-items'
 
-/*
+/**
  * Desktop navigation links and theme toggle, hidden on mobile.
  */
 export function NavLinks() {

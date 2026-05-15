@@ -1,6 +1,6 @@
 import { AnchorLink } from '@/components/AnchorLink'
 
-/*
+/**
  * Shown when an unsubscribe link is malformed or expired.
  */
 export default function InvalidUnsubscribePage() {

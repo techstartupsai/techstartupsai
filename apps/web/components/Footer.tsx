@@ -47,7 +47,7 @@ const SOCIAL_LINKS = [
   { title: 'Facebook', href: 'https://www.facebook.com/techstartupsai', icon: FaFacebook },
 ]
 
-/*
+/**
  * Site-wide footer with social links and navigation.
  */
 export function Footer() {
@@ -62,10 +62,13 @@ export function Footer() {
             <AnchorLink
               key={title}
               href={href}
-              title={title}
-              className="text-muted-foreground transition-colors hover:text-foreground"
+              className="group/tooltip relative text-muted-foreground transition-colors hover:text-foreground"
             >
               <Icon className="h-5 w-5" />
+              {/* tooltip — appears above icon on hover */}
+              <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded border border-border bg-popover px-2 py-1 text-xs whitespace-nowrap text-popover-foreground opacity-0 shadow-md transition-opacity duration-150 group-hover/tooltip:opacity-100">
+                {title}
+              </span>
             </AnchorLink>
           ))}
         </div>

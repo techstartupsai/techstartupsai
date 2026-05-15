@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/nextjs'
 import NextError from 'next/error'
 import { useEffect } from 'react'
 
-/*
+/**
  * Top-level error boundary rendered when a fatal error occurs outside any route segment.
  */
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {

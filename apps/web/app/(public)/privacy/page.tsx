@@ -1,6 +1,6 @@
 import { AnchorLink } from '@/components/AnchorLink'
 
-/*
+/**
  * Privacy policy page.
  */
 export default function PrivacyPage() {

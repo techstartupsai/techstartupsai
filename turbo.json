@@ -5,7 +5,17 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "SUPABASE_SECRET_KEY",
+        "SUPABASE_PROJECT_REF",
+        "STRIPE_SECRET_KEY",
+        "STRIPE_WEBHOOK_SECRET",
+        "RESEND_API_KEY",
+        "SENTRY_AUTH_TOKEN",
+        "TURNSTILE_SECRET_KEY",
+        "REVALIDATE_SECRET"
+      ]
     },
     "dev": {
       "cache": false,

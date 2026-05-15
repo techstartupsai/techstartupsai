@@ -10,7 +10,7 @@ import { waitlistRequestSchema } from '@/lib/schemas'
 
 const POSTGRES_UNIQUE_VIOLATION = '23505'
 
-/*
+/**
  * Adds an email to the waitlist, sends confirmation and admin notification emails.
  */
 export async function POST(request: Request) {

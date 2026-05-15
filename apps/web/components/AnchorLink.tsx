@@ -1,30 +1,20 @@
 import Link from 'next/link'
 
-interface AnchorLinkProps {
+interface AnchorLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string
-  children: React.ReactNode
-  className?: string
-  title?: string
-  onClick?: React.MouseEventHandler<HTMLAnchorElement>
   noFollow?: boolean
 }
 
-/*
+/**
  * Renders a Next.js Link for internal routes or a plain <a> for external URLs and mailto/tel.
+ * All native anchor attributes are forwarded and override defaults.
  */
-export function AnchorLink({
-  href,
-  children,
-  className,
-  title,
-  onClick,
-  noFollow = false,
-}: AnchorLinkProps) {
+export function AnchorLink({ href, children, noFollow = false, ...props }: AnchorLinkProps) {
   // internal paths use Next.js Link for client-side navigation
   const isInternal = href.startsWith('/') || href.startsWith('#')
   if (isInternal) {
     return (
-      <Link href={href} className={className} title={title} onClick={onClick}>
+      <Link href={href} {...props}>
         {children}
       </Link>
     )
@@ -34,16 +24,16 @@ export function AnchorLink({
   const isSchemeLink = href.startsWith('mailto:') || href.startsWith('tel:')
   if (isSchemeLink) {
     return (
-      <a href={href} className={className} title={title} onClick={onClick}>
+      <a href={href} {...props}>
         {children}
       </a>
     )
   }
 
-  // external links open in a new tab with appropriate rel attributes
+  // external links open in a new tab with appropriate rel attributes; consumer can override
   const rel = ['noopener', 'noreferrer', ...(noFollow ? ['nofollow'] : [])].join(' ')
   return (
-    <a href={href} target="_blank" rel={rel} className={className} title={title} onClick={onClick}>
+    <a href={href} target="_blank" rel={rel} {...props}>
       {children}
     </a>
   )

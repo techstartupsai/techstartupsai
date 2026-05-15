@@ -5,7 +5,7 @@ export type TurnstileVerificationResult =
   | { success: true }
   | { success: false; reason: 'missing-token' | 'verification-failed' | 'fetch-error' }
 
-/*
+/**
  * Verifies a Turnstile token against the Cloudflare siteverify endpoint.
  */
 export async function verifyTurnstileToken(

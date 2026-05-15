@@ -1,6 +1,6 @@
 import { AnchorLink } from '@/components/AnchorLink'
 
-/*
+/**
  * Terms of service page.
  */
 export default function TermsPage() {

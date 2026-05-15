@@ -15,9 +15,11 @@
   },
   "devDependencies": {
     "@types/react": "^19",
+    "next": "16.2.1",
     "typescript": "^5"
   },
   "peerDependencies": {
+    "next": ">=14",
     "react": "^19"
   }
 }

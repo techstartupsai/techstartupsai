@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/nextjs'
 import { redirect } from 'next/navigation'
 import { emailSchema } from '@/lib/schemas'
 
-/*
+/**
  * Marks a waitlist email as unsubscribed and redirects to the confirmation page.
  */
 export async function GET(request: NextRequest) {
