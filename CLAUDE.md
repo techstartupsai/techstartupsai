@@ -48,7 +48,7 @@ techstartupsai/
 - **Stripe** — subscriptions, one per user type per user
 - **Turborepo + Bun workspaces** — build caching, shared packages
 - **Vercel** — apps/web deployment
-- **Railway** — apps/ai-service deployment
+- **Northflank** — apps/ai-service + apps/cron + Temporal workers deployment
 - **Langfuse** — AI observability (traces, cost, evals)
 - **Anthropic Claude** — primary AI provider, direct SDK (no LangChain)
 
