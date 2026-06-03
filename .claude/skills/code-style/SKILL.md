@@ -33,6 +33,24 @@ Other common substitutions:
 
 Boolean variables and props must be prefixed with `is`, `has`, `can`, `should`, or `will`. Examples: `isPopular`, `isLoading`, `hasError`, `canSubmit`, `shouldRetry`, `willExpire`.
 
+### Meaningful variable names
+
+Variable names must describe what the value represents, not its position or freshness. Generic names like `existing`, `latest`, `current`, `result`, `data`, `value`, `item` are not self-documenting — a reader has to look around to figure out what's actually being held.
+
+```typescript
+// wrong
+const existing = await db.findUser(id)
+const latest = posts[posts.length - 1]
+const result = parseFrontmatter(raw)
+const data = await response.json()
+
+// right
+const existingUser = await db.findUser(id)
+const latestPost = posts[posts.length - 1]
+const frontmatter = parseFrontmatter(raw)
+const reviewPayload = await response.json()
+```
+
 ### Always use curly braces on control flow
 
 Always use curly braces for `if` / `else` blocks — even single-line ones. Same rule for `for`, `while`, and `else`. The body always goes on its own line — never on the same line as the brace.
