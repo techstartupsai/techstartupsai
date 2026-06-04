@@ -1,26 +1,33 @@
 import { NextRequest } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import * as Sentry from '@sentry/nextjs'
 import { redirect } from 'next/navigation'
+import { createServiceRoleClient } from '@techstartups/db/server'
 import { emailSchema } from '@/lib/schemas'
+import { verifyUnsubscribeToken } from '@/lib/unsubscribe-token'
 
 /**
  * Marks a waitlist email as unsubscribed and redirects to the confirmation page.
+ * Requires a valid HMAC token and a POST request — defeats email-scanner auto-clicks.
  */
-export async function GET(request: NextRequest) {
-  // parse the email from query params
-  const emailParam = request.nextUrl.searchParams.get('email')
+export async function POST(request: NextRequest) {
+  // parse the email and token from the form body
+  const formData = await request.formData()
+  const emailParam = formData.get('email')
+  const tokenParam = formData.get('token')
+
   const parseResult = emailSchema.safeParse(emailParam)
-  if (!parseResult.success) {
+  if (!parseResult.success || typeof tokenParam !== 'string') {
     redirect('/unsubscribe/invalid')
   }
   const email = parseResult.data
 
+  // verify the HMAC token before touching the database
+  if (!verifyUnsubscribeToken(email, tokenParam)) {
+    redirect('/unsubscribe/invalid')
+  }
+
   // update the waitlist entry with the unsubscribed_at timestamp
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SECRET_KEY!
-  )
+  const supabase = createServiceRoleClient()
   const { error: updateError } = await supabase
     .from('waitlist')
     .update({ unsubscribed_at: new Date().toISOString() })

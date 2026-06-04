@@ -22,8 +22,11 @@ export function NavMenu({ isMenuOpen, onMenuOpenChange }: NavMenuProps) {
   const pathname = usePathname()
   const menuRef = useRef<HTMLDivElement>(null)
 
-  // close the menu on escape key press
+  // close the menu on escape key press — only listen while open
   useEffect(() => {
+    if (!isMenuOpen) {
+      return
+    }
     function handlePageKeyPress(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         onMenuOpenChange(false)
@@ -31,18 +34,19 @@ export function NavMenu({ isMenuOpen, onMenuOpenChange }: NavMenuProps) {
     }
     document.addEventListener('keydown', handlePageKeyPress)
     return () => document.removeEventListener('keydown', handlePageKeyPress)
-  }, [onMenuOpenChange])
+  }, [isMenuOpen, onMenuOpenChange])
 
-  // close the menu on click outside
+  // close the menu on click outside — only listen while open
   useEffect(() => {
+    if (!isMenuOpen) {
+      return
+    }
     function handlePageClick(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         onMenuOpenChange(false)
       }
     }
-    if (isMenuOpen) {
-      document.addEventListener('mousedown', handlePageClick)
-    }
+    document.addEventListener('mousedown', handlePageClick)
     return () => document.removeEventListener('mousedown', handlePageClick)
   }, [isMenuOpen, onMenuOpenChange])
 

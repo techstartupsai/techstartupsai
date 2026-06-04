@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { Oxanium, Figtree } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import { cn } from '@/lib/utils'
-import { Header } from '@/components/Header'
+import { Header } from '@/components/Header/Header'
 import { JoinWaitlistModal } from '@/components/JoinWaitlistModal/JoinWaitlistModal'
 
 // display font for headings

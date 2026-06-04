@@ -5,6 +5,10 @@ import { GetEarlyAccessButton } from '@/components/GetEarlyAccessButton'
 
 type HtmlProps<Tag extends keyof React.JSX.IntrinsicElements> = React.ComponentPropsWithoutRef<Tag>
 
+/**
+ * Returns the MDX component map used to render blog posts — branded HTML elements plus
+ * any overrides the caller passes for per-post customization.
+ */
 export function getMdxComponents(overrides?: Record<string, React.ComponentType>) {
   return {
     a: ({ href, children }: HtmlProps<'a'>) => (

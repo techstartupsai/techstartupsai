@@ -19,7 +19,7 @@ export default function AdminSignupNotification({
       <Body>
         <Container>
           <Text>
-            <strong>{'New waitlist signup'}</strong>
+            <strong>New waitlist signup</strong>
           </Text>
           <Text>{`Email: ${email}`}</Text>
           {userTypes && userTypes.length > 0 ? (

@@ -91,7 +91,7 @@ describe('POST /api/waitlist', () => {
 
     expect(response.status).toBe(400)
     const body = await response.json()
-    expect(body).toEqual({ error: 'Invalid email address' })
+    expect(body).toEqual({ success: false, error: 'Invalid email address' })
     expect(mocks.mockInsert).not.toHaveBeenCalled()
   })
 
@@ -101,7 +101,7 @@ describe('POST /api/waitlist', () => {
 
     expect(response.status).toBe(400)
     const body = await response.json()
-    expect(body).toEqual({ error: 'Invalid email address' })
+    expect(body).toEqual({ success: false, error: 'Invalid email address' })
     expect(mocks.mockInsert).not.toHaveBeenCalled()
   })
 
@@ -153,7 +153,7 @@ describe('POST /api/waitlist', () => {
 
     expect(response.status).toBe(409)
     const body = await response.json()
-    expect(body).toEqual({ error: 'Already on the waitlist' })
+    expect(body).toEqual({ success: false, error: 'Already on the waitlist' })
     expect(mocks.mockEmailSend).not.toHaveBeenCalled()
   })
 
@@ -219,13 +219,17 @@ describe('POST /api/waitlist', () => {
     expect(mocks.mockUpdateEq).toHaveBeenCalledWith('email', 'returning@example.com')
 
     // verify no mutation included id or created_at fields
-    for (const [argument] of mocks.mockInsert.mock.calls) {
-      expect(argument).not.toHaveProperty('id')
-      expect(argument).not.toHaveProperty('created_at')
+    const insertCalls = mocks.mockInsert.mock.calls as unknown[][]
+    const updateCalls = mocks.mockUpdate.mock.calls as unknown[][]
+    for (const insertCall of insertCalls) {
+      const insertPayload = insertCall[0]
+      expect(insertPayload).not.toHaveProperty('id')
+      expect(insertPayload).not.toHaveProperty('created_at')
     }
-    for (const [argument] of mocks.mockUpdate.mock.calls) {
-      expect(argument).not.toHaveProperty('id')
-      expect(argument).not.toHaveProperty('created_at')
+    for (const updateCall of updateCalls) {
+      const updatePayload = updateCall[0]
+      expect(updatePayload).not.toHaveProperty('id')
+      expect(updatePayload).not.toHaveProperty('created_at')
     }
 
     // confirmation and admin notification emails were sent
@@ -256,7 +260,10 @@ describe('POST /api/waitlist', () => {
 
     expect(response.status).toBe(500)
     const body = await response.json()
-    expect(body).toEqual({ error: 'Failed to join the waitlist. Please try again.' })
+    expect(body).toEqual({
+      success: false,
+      error: 'Failed to join the waitlist. Please try again.',
+    })
     expect(mocks.mockCaptureException).toHaveBeenCalledWith(
       expect.objectContaining({ code: '42P01' })
     )
@@ -283,7 +290,10 @@ describe('POST /api/waitlist', () => {
 
     expect(response.status).toBe(500)
     const body = await response.json()
-    expect(body).toEqual({ error: 'Failed to join the waitlist. Please try again.' })
+    expect(body).toEqual({
+      success: false,
+      error: 'Failed to join the waitlist. Please try again.',
+    })
     expect(mocks.mockCaptureException).toHaveBeenCalledWith(updateError)
     expect(mocks.mockEmailSend).not.toHaveBeenCalled()
   })
@@ -488,7 +498,7 @@ describe('POST /api/waitlist', () => {
 
       expect(response.status).toBe(400)
       const body = await response.json()
-      expect(body).toEqual({ error: 'Verification failed. Please try again.' })
+      expect(body).toEqual({ success: false, error: 'Verification failed. Please try again.' })
       expect(mocks.mockInsert).not.toHaveBeenCalled()
       expect(mocks.mockEmailSend).not.toHaveBeenCalled()
     })
@@ -499,7 +509,7 @@ describe('POST /api/waitlist', () => {
 
       expect(response.status).toBe(400)
       const body = await response.json()
-      expect(body).toEqual({ error: 'Verification failed. Please try again.' })
+      expect(body).toEqual({ success: false, error: 'Verification failed. Please try again.' })
       expect(mocks.mockInsert).not.toHaveBeenCalled()
       expect(mocks.mockEmailSend).not.toHaveBeenCalled()
     })

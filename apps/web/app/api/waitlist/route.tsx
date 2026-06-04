@@ -1,14 +1,20 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import * as Sentry from '@sentry/nextjs'
 import { Resend } from 'resend'
 import { render } from 'react-email'
 import WaitlistConfirmation from '@techstartups/emails/WaitlistConfirmation'
 import AdminSignupNotification from '@techstartups/emails/AdminSignupNotification'
+import { createServiceRoleClient } from '@techstartups/db/server'
 import { verifyTurnstileToken } from '@/lib/turnstile'
+import { requireEnv } from '@/lib/env'
+import { buildSignedUnsubscribeUrl } from '@/lib/unsubscribe-token'
 import { waitlistRequestSchema } from '@/lib/schemas'
 
 const POSTGRES_UNIQUE_VIOLATION = '23505'
+
+// read once at module load — throws at first request if any are unset, surfacing misconfig before any DB writes happen
+const siteUrl = requireEnv('NEXT_PUBLIC_SITE_URL')
+const resend = new Resend(requireEnv('RESEND_API_KEY'))
 
 /**
  * Adds an email to the waitlist, sends confirmation and admin notification emails.
@@ -16,23 +22,23 @@ const POSTGRES_UNIQUE_VIOLATION = '23505'
 export async function POST(request: Request) {
   // parse the request body
   const body: unknown = await request.json()
-  const result = waitlistRequestSchema.safeParse(body)
-  if (!result.success) {
-    return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
+  const parseResult = waitlistRequestSchema.safeParse(body)
+  if (!parseResult.success) {
+    return NextResponse.json({ success: false, error: 'Invalid email address' }, { status: 400 })
   }
 
   // verify the turnstile token
-  const { email, userTypes, turnstileToken } = result.data
+  const { email, userTypes, turnstileToken } = parseResult.data
   const verification = await verifyTurnstileToken(turnstileToken)
   if (!verification.success) {
-    return NextResponse.json({ error: 'Verification failed. Please try again.' }, { status: 400 })
+    return NextResponse.json(
+      { success: false, error: 'Verification failed. Please try again.' },
+      { status: 400 }
+    )
   }
 
   // create a new waitlist entry
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SECRET_KEY!
-  )
+  const supabase = createServiceRoleClient()
   const insertData: Record<string, unknown> = { email }
   if (userTypes) {
     insertData.user_types = userTypes
@@ -43,7 +49,7 @@ export async function POST(request: Request) {
   if (insertError) {
     if (insertError.code === POSTGRES_UNIQUE_VIOLATION) {
       // check if the user previously unsubscribed
-      const { data: existing, error: selectError } = await supabase
+      const { data: existingSubscriber, error: selectError } = await supabase
         .from('waitlist')
         .select('unsubscribed_at, user_types')
         .eq('email', email)
@@ -51,12 +57,15 @@ export async function POST(request: Request) {
 
       if (selectError) {
         Sentry.captureException(selectError)
-        return NextResponse.json({ error: 'Already on the waitlist' }, { status: 409 })
+        return NextResponse.json(
+          { success: false, error: 'Already on the waitlist' },
+          { status: 409 }
+        )
       }
 
       // build the update payload
       const updateData: Record<string, unknown> = {}
-      if (existing?.unsubscribed_at) {
+      if (existingSubscriber?.unsubscribed_at) {
         updateData.unsubscribed_at = null
       }
       if (userTypes) {
@@ -65,7 +74,10 @@ export async function POST(request: Request) {
 
       // nothing to update — active subscriber with no new types
       if (Object.keys(updateData).length === 0) {
-        return NextResponse.json({ error: 'Already on the waitlist' }, { status: 409 })
+        return NextResponse.json(
+          { success: false, error: 'Already on the waitlist' },
+          { status: 409 }
+        )
       }
 
       const { error: updateError } = await supabase
@@ -76,14 +88,14 @@ export async function POST(request: Request) {
       if (updateError) {
         Sentry.captureException(updateError)
         return NextResponse.json(
-          { error: 'Failed to join the waitlist. Please try again.' },
+          { success: false, error: 'Failed to join the waitlist. Please try again.' },
           { status: 500 }
         )
       }
     } else {
       Sentry.captureException(insertError)
       return NextResponse.json(
-        { error: 'Failed to join the waitlist. Please try again.' },
+        { success: false, error: 'Failed to join the waitlist. Please try again.' },
         { status: 500 }
       )
     }
@@ -95,12 +107,13 @@ export async function POST(request: Request) {
       ? `New waitlist signup (${userTypes.join(', ')}): ${email}`
       : 'New waitlist signup'
 
+  // build the signed unsubscribe URL — branded type ensures the email cannot be sent with a raw URL
+  const unsubscribeUrl = buildSignedUnsubscribeUrl(siteUrl, email)
+
   // render and send the waitlist confirmation and notification emails
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!
-  const resend = new Resend(process.env.RESEND_API_KEY)
   try {
     const [confirmationHtml, notificationHtml] = await Promise.all([
-      render(<WaitlistConfirmation email={email} siteUrl={siteUrl} />),
+      render(<WaitlistConfirmation unsubscribeUrl={unsubscribeUrl} />),
       render(<AdminSignupNotification email={email} userTypes={userTypes} />),
     ])
 

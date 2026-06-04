@@ -13,12 +13,21 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  // toggle blur once the user scrolls past the top of the page
+  // toggle blur once the user scrolls past the top of the page — rAF-throttled to avoid setState floods on mobile
   useEffect(() => {
-    function handlePageScroll() {
+    let isFrameScheduled = false
+    function readScrollPosition() {
+      isFrameScheduled = false
       setIsScrolled(window.scrollY > 0)
     }
-    handlePageScroll()
+    function handlePageScroll() {
+      if (isFrameScheduled) {
+        return
+      }
+      isFrameScheduled = true
+      requestAnimationFrame(readScrollPosition)
+    }
+    readScrollPosition()
     window.addEventListener('scroll', handlePageScroll, { passive: true })
     return () => window.removeEventListener('scroll', handlePageScroll)
   }, [])

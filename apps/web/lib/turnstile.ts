@@ -31,8 +31,8 @@ export async function verifyTurnstileToken(
       body: JSON.stringify({ secret, response: token }),
     })
 
-    const data = (await response.json()) as { success: boolean }
-    return data.success === true
+    const siteverifyResponse = (await response.json()) as { success: boolean }
+    return siteverifyResponse.success === true
       ? { success: true }
       : { success: false, reason: 'verification-failed' }
   } catch {

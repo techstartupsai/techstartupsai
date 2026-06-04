@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { AnchorLink } from '@/components/AnchorLink'
+import { formatPostDate } from '@/lib/format-date'
 
 export const metadata: Metadata = {
   title: 'Blog — TechStartups.ai',
@@ -39,13 +40,7 @@ export default function BlogPage() {
     coverImageDark,
   } = FEATURED_POST
 
-  // parse as local date to avoid UTC-offset display issues
-  const [year, month, day] = date.split('-').map(Number)
-  const formattedDate = new Date(year, month - 1, day).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+  const formattedDate = formatPostDate(date)
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
@@ -60,10 +55,9 @@ export default function BlogPage() {
         <li>
           <AnchorLink
             href={`/blog/${category}/${slug}`}
-            target="_blank"
             className="group flex flex-col overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md"
           >
-            {/* cover image — light and dark variants */}
+            {/* cover image — light and dark variants. Only the light variant is priority-preloaded; the dark variant loads lazily and pays one extra request for dark-mode users (acceptable trade-off vs. preloading both). */}
             <div className="relative aspect-video w-full overflow-hidden">
               <Image
                 src={coverImageLight}
@@ -79,7 +73,6 @@ export default function BlogPage() {
                 fill
                 className="hidden object-cover dark:block"
                 sizes="(max-width: 768px) 100vw, 672px"
-                priority
               />
             </div>
 

@@ -89,11 +89,11 @@ export function JoinWaitlistModal() {
       })
 
       // handle the response
-      const data = (await response.json()) as WaitlistApiResponse
-      if (!response.ok) {
-        setErrorMessage('error' in data ? data.error : 'Something went wrong. Please try again.')
-      } else {
+      const apiResponse = (await response.json()) as WaitlistApiResponse
+      if (apiResponse.success) {
         setIsSuccess(true)
+      } else {
+        setErrorMessage(apiResponse.error)
       }
     } catch {
       setErrorMessage('Something went wrong. Please try again.')

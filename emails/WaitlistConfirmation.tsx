@@ -1,15 +1,17 @@
 import { Body, Container, Head, Heading, Hr, Html, Link, Preview, Section, Text } from 'react-email'
 import type { CSSProperties } from 'react'
 
+// branded type — a URL that has been HMAC-signed for unsubscribe. The component owns
+// the prop contract; the producer (apps/web/lib/unsubscribe-token) imports this type
+// and is the only place that casts a raw string into it.
+export type SignedUnsubscribeUrl = string & { readonly _brand: 'SignedUnsubscribeUrl' }
+
 interface WaitlistConfirmationProps {
-  email: string
-  siteUrl: string
+  unsubscribeUrl: SignedUnsubscribeUrl
 }
 
 // waitlist confirmation email sent to users after signing up
-export default function WaitlistConfirmation({ email, siteUrl }: WaitlistConfirmationProps) {
-  const unsubscribeUrl = `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(email)}`
-
+export default function WaitlistConfirmation({ unsubscribeUrl }: WaitlistConfirmationProps) {
   return (
     <Html>
       <Head />
@@ -18,16 +20,16 @@ export default function WaitlistConfirmation({ email, siteUrl }: WaitlistConfirm
         <Container style={containerStyle}>
           {/* logo */}
           <Section style={{ marginBottom: '20px' }}>
-            <div style={logoIconStyle}>{'🚀'}</div>
+            <div style={logoIconStyle}>🚀</div>
             <span style={logoTextStyle}>
-              {'Tech'}
-              <span style={{ color: '#6366f1' }}>{'Startups'}</span>
-              {'.ai'}
+              Tech
+              <span style={{ color: '#6366f1' }}>Startups</span>
+              .ai
             </span>
           </Section>
 
           {/* early access badge */}
-          <div style={badgeStyle}>{'Early Access'}</div>
+          <div style={badgeStyle}>Early Access</div>
 
           {/* heading */}
           <Heading style={headingStyle}>{"You're on the list."}</Heading>
@@ -45,11 +47,11 @@ export default function WaitlistConfirmation({ email, siteUrl }: WaitlistConfirm
           <Section style={{ marginBottom: '36px' }}>
             <Text style={benefitStyle}>
               <span style={bulletDotStyle} />
-              {'Early access to AI-powered startup profiles and momentum scores'}
+              Early access to AI-powered startup profiles and momentum scores
             </Text>
             <Text style={benefitStyle}>
               <span style={bulletDotStyle} />
-              {'Founding member pricing when we launch paid tiers'}
+              Founding member pricing when we launch paid tiers
             </Text>
             <Text style={{ ...benefitStyle, margin: 0 }}>
               <span style={bulletDotStyle} />
@@ -59,13 +61,13 @@ export default function WaitlistConfirmation({ email, siteUrl }: WaitlistConfirm
 
           {/* footer */}
           <Text style={footerStyle}>
-            {'Sent from '}
+            Sent from{' '}
             <Link href="mailto:hello@techstartups.ai" style={footerLinkStyle}>
-              {'hello@techstartups.ai'}
+              hello@techstartups.ai
             </Link>
             {" \u00b7 You're receiving this because you signed up at techstartups.ai \u00b7 "}
             <Link href={unsubscribeUrl} style={footerLinkStyle}>
-              {'Unsubscribe'}
+              Unsubscribe
             </Link>
           </Text>
         </Container>

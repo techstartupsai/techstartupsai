@@ -244,16 +244,16 @@ async function main(): Promise<void> {
   if (targetSlug !== null) {
     // search each category directory for the requested slug
     const categories = ['soonicorn-of-the-month', 'news-room', 'tech-scene']
-    let found = false
+    let isFound = false
     for (const category of categories) {
       const filePath = join(contentRoot, category, `${targetSlug}.mdx`)
       if (existsSync(filePath)) {
         filePaths.push(filePath)
-        found = true
+        isFound = true
         break
       }
     }
-    if (!found) {
+    if (!isFound) {
       console.error(`✗ File not found for slug: ${targetSlug}`)
       process.exit(1)
     }
@@ -291,26 +291,26 @@ async function main(): Promise<void> {
   let failedCount = 0
 
   for (const filePath of filePaths) {
-    const result = await syncFile(filePath, supabase, { forceAll })
+    const syncOutcome = await syncFile(filePath, supabase, { forceAll })
 
-    switch (result.status) {
+    switch (syncOutcome.status) {
       case 'new': {
-        console.log(`✓ New: ${result.slug}`)
+        console.log(`✓ New: ${syncOutcome.slug}`)
         newCount++
         break
       }
       case 'updated': {
-        console.log(`✓ Updated: ${result.slug}`)
+        console.log(`✓ Updated: ${syncOutcome.slug}`)
         updatedCount++
         break
       }
       case 'skipped': {
-        console.log(`→ Skipped: ${result.slug}`)
+        console.log(`→ Skipped: ${syncOutcome.slug}`)
         skippedCount++
         break
       }
       case 'failed': {
-        console.error(`✗ Failed: ${result.slug} — ${String(result.error)}`)
+        console.error(`✗ Failed: ${syncOutcome.slug} — ${String(syncOutcome.error)}`)
         failedCount++
         break
       }

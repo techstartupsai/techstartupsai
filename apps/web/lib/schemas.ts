@@ -16,4 +16,4 @@ export const waitlistRequestSchema = z.object({
 export type WaitlistRequest = z.infer<typeof waitlistRequestSchema>
 
 // discriminated union matching the actual API response shapes
-export type WaitlistApiResponse = { success: true } | { error: string }
+export type WaitlistApiResponse = { success: true } | { success: false; error: string }

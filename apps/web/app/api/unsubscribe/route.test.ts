@@ -37,16 +37,19 @@ vi.mock('next/navigation', () => ({
 }))
 
 import { NextRequest } from 'next/server'
-import { GET } from './route'
+import { POST } from './route'
+import { signUnsubscribeToken } from '@/lib/unsubscribe-token'
 
-function createUnsubscribeRequest(email?: string): NextRequest {
-  const url = email
-    ? `http://localhost/api/unsubscribe?email=${encodeURIComponent(email)}`
-    : 'http://localhost/api/unsubscribe'
-  return new NextRequest(url)
+function createUnsubscribeRequest(formFields: Record<string, string>): NextRequest {
+  const body = new URLSearchParams(formFields)
+  return new NextRequest('http://localhost/api/unsubscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: body.toString(),
+  })
 }
 
-describe('GET /api/unsubscribe', () => {
+describe('POST /api/unsubscribe', () => {
   beforeEach(() => {
     // default: update succeeds
     mocks.mockIs.mockReturnValue({ error: null })
@@ -57,25 +60,47 @@ describe('GET /api/unsubscribe', () => {
     })
   })
 
-  it('redirects to /unsubscribed on successful unsubscribe', async () => {
-    const request = createUnsubscribeRequest('test@example.com')
+  it('redirects to /unsubscribed when email and token are valid', async () => {
+    const email = 'test@example.com'
+    const token = signUnsubscribeToken(email)
+    const request = createUnsubscribeRequest({ email, token })
 
-    await expect(GET(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribed')
+    await expect(POST(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribed')
     expect(mocks.mockRedirect).toHaveBeenCalledWith('/unsubscribed')
   })
 
   it('redirects to /unsubscribe/invalid when email is missing', async () => {
-    const request = createUnsubscribeRequest()
+    const request = createUnsubscribeRequest({ token: 'whatever' })
 
-    await expect(GET(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribe/invalid')
+    await expect(POST(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribe/invalid')
     expect(mocks.mockRedirect).toHaveBeenCalledWith('/unsubscribe/invalid')
     expect(mocks.mockUpdate).not.toHaveBeenCalled()
   })
 
-  it('redirects to /unsubscribe/invalid for an invalid email', async () => {
-    const request = createUnsubscribeRequest('not-valid')
+  it('redirects to /unsubscribe/invalid when token is missing', async () => {
+    const request = createUnsubscribeRequest({ email: 'test@example.com' })
 
-    await expect(GET(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribe/invalid')
+    await expect(POST(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribe/invalid')
+    expect(mocks.mockRedirect).toHaveBeenCalledWith('/unsubscribe/invalid')
+    expect(mocks.mockUpdate).not.toHaveBeenCalled()
+  })
+
+  it('redirects to /unsubscribe/invalid when email is malformed', async () => {
+    const request = createUnsubscribeRequest({ email: 'not-valid', token: 'whatever' })
+
+    await expect(POST(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribe/invalid')
+    expect(mocks.mockRedirect).toHaveBeenCalledWith('/unsubscribe/invalid')
+    expect(mocks.mockUpdate).not.toHaveBeenCalled()
+  })
+
+  it('redirects to /unsubscribe/invalid when token does not match the email', async () => {
+    const tokenForDifferentEmail = signUnsubscribeToken('other@example.com')
+    const request = createUnsubscribeRequest({
+      email: 'test@example.com',
+      token: tokenForDifferentEmail,
+    })
+
+    await expect(POST(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribe/invalid')
     expect(mocks.mockRedirect).toHaveBeenCalledWith('/unsubscribe/invalid')
     expect(mocks.mockUpdate).not.toHaveBeenCalled()
   })
@@ -84,24 +109,28 @@ describe('GET /api/unsubscribe', () => {
     const updateError = new Error('database connection lost')
     mocks.mockIs.mockReturnValue({ error: updateError })
 
-    const request = createUnsubscribeRequest('test@example.com')
+    const email = 'test@example.com'
+    const token = signUnsubscribeToken(email)
+    const request = createUnsubscribeRequest({ email, token })
 
-    await expect(GET(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribed')
+    await expect(POST(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribed')
     expect(mocks.mockCaptureException).toHaveBeenCalledWith(updateError)
     expect(mocks.mockRedirect).toHaveBeenCalledWith('/unsubscribed')
   })
 
   it('calls supabase update with the correct filters', async () => {
-    const request = createUnsubscribeRequest('test@example.com')
+    const email = 'test@example.com'
+    const token = signUnsubscribeToken(email)
+    const request = createUnsubscribeRequest({ email, token })
 
-    await expect(GET(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribed')
+    await expect(POST(request)).rejects.toThrow('NEXT_REDIRECT:/unsubscribed')
 
     // verify the update targets the correct table and email
     expect(mocks.mockFrom).toHaveBeenCalledWith('waitlist')
     expect(mocks.mockUpdate).toHaveBeenCalledWith({
       unsubscribed_at: expect.any(String),
     })
-    expect(mocks.mockEq).toHaveBeenCalledWith('email', 'test@example.com')
+    expect(mocks.mockEq).toHaveBeenCalledWith('email', email)
     expect(mocks.mockIs).toHaveBeenCalledWith('unsubscribed_at', null)
   })
 })

@@ -1,6 +1,3 @@
-'use client'
-
-import { usePathname } from 'next/navigation'
 import {
   FaLinkedin,
   FaXTwitter,
@@ -13,8 +10,8 @@ import {
   FaFacebook,
 } from 'react-icons/fa6'
 import { SiSubstack, SiBluesky, SiThreads } from 'react-icons/si'
-import { cn } from '@/lib/utils'
 import { AnchorLink } from '@/components/AnchorLink'
+import { FooterNavLink } from '@/components/FooterNavLink'
 
 const FOOTER_LINKS = [
   { label: 'Privacy', href: '/privacy' },
@@ -51,8 +48,6 @@ const SOCIAL_LINKS = [
  * Site-wide footer with social links and navigation.
  */
 export function Footer() {
-  const pathname = usePathname()
-
   return (
     <footer>
       <div className="mx-auto max-w-6xl px-4 py-6">
@@ -80,16 +75,7 @@ export function Footer() {
           </AnchorLink>
           <nav className="flex items-center gap-4">
             {FOOTER_LINKS.map(({ label, href }) => (
-              <AnchorLink
-                key={href}
-                href={href}
-                className={cn(
-                  'transition-colors hover:text-foreground',
-                  pathname === href && 'font-medium text-foreground'
-                )}
-              >
-                {label}
-              </AnchorLink>
+              <FooterNavLink key={href} href={href} label={label} />
             ))}
           </nav>
           <p>© 2026 TechStartups AI</p>

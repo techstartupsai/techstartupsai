@@ -37,6 +37,7 @@ const getPost = cache(async (category: string, slug: string) => {
     source,
     options: {
       parseFrontmatter: true,
+      // keep JS expressions in MDX — next-mdx-remote v6 defaults to silently stripping them
       blockJS: false,
       mdxOptions: { remarkPlugins: [remarkGfm] },
     },

@@ -1,11 +1,8 @@
-'use client'
-
 import { type ReactNode } from 'react'
 import { Check } from 'lucide-react'
-import { Button } from '@techstartups/ui'
 import { cn } from '@/lib/utils'
 import { GetEarlyAccessButton } from '@/components/GetEarlyAccessButton'
-import { useJoinWaitlistModal } from '@/lib/useJoinWaitlistModal'
+import { JoinWaitlistButton } from '@/components/JoinWaitlistButton'
 import { type UserType } from '@/lib/schemas'
 
 interface Plan {
@@ -155,28 +152,26 @@ const USER_TIERS: UserTier[] = [
  * Public landing page — hero, pricing plans, and FAQ.
  */
 export default function HomePage() {
-  const { open: openWaitlistModal } = useJoinWaitlistModal()
-
   return (
     <div className="flex flex-col">
-      {/* Hero section */}
+      {/* hero section */}
       <section className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-4 py-14 text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
           Startup Tracking,
           <span className="block text-primary">powered by AI</span>
         </h1>
 
-        <p className="max-w-2xl text-lg transition-all duration-300">
+        <p className="max-w-2xl text-lg">
           Continuous intelligence for job seekers, founders, and investors.
         </p>
 
-        {/* Waitlist CTA */}
+        {/* waitlist CTA */}
         <div className="flex w-full max-w-md flex-col items-center gap-3">
           <GetEarlyAccessButton />
         </div>
       </section>
 
-      {/* Pricing plans */}
+      {/* pricing plans */}
       <section id="pricing" className="mx-auto w-full max-w-6xl px-4 py-16">
         <div className="mb-8 text-center">
           <h2 className="mb-2 text-3xl font-bold tracking-tight">Simple, transparent pricing</h2>
@@ -240,13 +235,12 @@ export default function HomePage() {
                       ))}
                     </ul>
 
-                    <Button
+                    <JoinWaitlistButton
                       variant={isPopular ? 'default' : 'outline'}
                       className="mt-auto w-full"
-                      onClick={openWaitlistModal}
                     >
                       {price === null ? 'Get started free' : 'Join waitlist'}
-                    </Button>
+                    </JoinWaitlistButton>
                   </div>
                 ))}
               </div>
