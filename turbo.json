@@ -14,7 +14,8 @@
         "RESEND_API_KEY",
         "SENTRY_AUTH_TOKEN",
         "TURNSTILE_SECRET_KEY",
-        "REVALIDATE_SECRET"
+        "REVALIDATE_SECRET",
+        "UNSUBSCRIBE_SECRET"
       ]
     },
     "dev": {
